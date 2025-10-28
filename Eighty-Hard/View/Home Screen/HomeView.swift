@@ -12,6 +12,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Bindable var challenge: Challenge
+    @State private var isShowingSettings = false
     
     var body: some View {
         VStack {
@@ -25,7 +26,15 @@ struct HomeView: View {
             }
         }
         .navigationTitle("80 Hard")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    isShowingSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     OverviewView(challenge: challenge)
@@ -33,6 +42,9 @@ struct HomeView: View {
                     Image(systemName: "calendar")
                 }
             }
+        }
+        .sheet(isPresented: $isShowingSettings) {
+            SettingsView(challenge: challenge)
         }
         .onAppear {
             if let currentDay = challenge.currentDay {
@@ -62,6 +74,8 @@ struct HomeView: View {
     
     let challenge = Challenge()
     
-    HomeView(challenge: challenge)
-        .modelContainer(container)
+    NavigationStack {
+        HomeView(challenge: challenge)
+            .modelContainer(container)
+    }
 }

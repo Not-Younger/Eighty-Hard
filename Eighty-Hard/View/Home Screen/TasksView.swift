@@ -32,6 +32,22 @@ struct TasksView: View {
     
     private var isAllCompleted: Bool { completedCount == totalCount }
     
+    // Computed color based on completion percentage
+    private var progressColor: Color {
+        let fraction = Double(completedCount) / Double(totalCount)
+        
+        switch fraction {
+        case 0..<0.5:
+            return .red
+        case 0.5..<0.75:
+            return .orange
+        case 0.75..<1:
+            return .yellow
+        default:
+            return .green // 100% completion
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             
@@ -47,7 +63,7 @@ struct TasksView: View {
                     .animation(.easeInOut(duration: 0.3), value: completedCount)
                 
                 ProgressView(value: Double(completedCount), total: Double(totalCount))
-                    .accentColor(.green)
+                    .accentColor(progressColor)
                     .animation(.easeInOut(duration: 0.3), value: completedCount)
             }
             .padding(.bottom)
