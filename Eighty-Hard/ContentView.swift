@@ -17,6 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             StartScreen(activeChallenge: $activeChallenge, path: $path)
+                .preferredColorScheme(.dark)
                 .navigationDestination(for: Challenge.self) { challenge in
                     HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
                 }
