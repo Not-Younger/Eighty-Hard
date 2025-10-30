@@ -10,6 +10,7 @@ import SwiftUI
 
 struct OverviewView: View {
     @Bindable var challenge: Challenge
+    @Binding var path: NavigationPath
     
     let totalDots = 80
     let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 7)
@@ -84,12 +85,8 @@ struct OverviewView: View {
                         let dayNumber = index + 1
                         let day = days.first(where: { $0.number == dayNumber })
                         
-                        NavigationLink {
-                            if let day {
-                                TasksView(day: day)
-                            } else {
-                                Text("No data for day \(dayNumber)")
-                            }
+                        Button {
+                            path.append(Navigation.tasks(day: day, dayNumber: dayNumber))
                         } label: {
                             ZStack {
                                 Circle()
@@ -111,24 +108,4 @@ struct OverviewView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollIndicators(.hidden)
     }
-}
-
-#Preview {
-    let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
-    
-    let challenge = Challenge()
-    let day1 = Day(number: 1)
-    day1.didDrinkWater = true
-    day1.didWorkout = true
-    
-    let day2 = Day(number: 2)
-    day2.didDrinkWater = true
-    
-    let day3 = Day(number: 3)
-    
-    challenge.days = [day1, day2, day3]
-    
-    return OverviewView(challenge: challenge)
-        .modelContainer(container)
 }

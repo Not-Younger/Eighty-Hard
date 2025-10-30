@@ -10,22 +10,21 @@ import SwiftUI
 
 struct StartScreen: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var challenges: [Challenge]
     
-    let hasCompletedChallenge: Bool
+    @Binding var activeChallenge: Challenge?
+    @Binding var path: NavigationPath
     
-    // Gradient animation
     @State private var animateGradient = false
     
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
-                
-                // Title with circular motif
                 ZStack {
                     Circle()
                         .stroke(lineWidth: 8)
                         .foregroundStyle(
-                            LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            LinearGradient(colors: [.red, .orange, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing)
                         )
                         .frame(width: 180, height: 180)
                         .rotationEffect(.degrees(animateGradient ? 360 : 0))
@@ -60,40 +59,57 @@ struct StartScreen: View {
                 .padding(.horizontal)
                 
                 Button {
-                    modelContext.insert(Challenge())
+                    
                 } label: {
-                    Text("Start 80 Hard \(hasCompletedChallenge ? "Again " : "")")
+                    Text("More details")
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                Button {
+                    let newChallenge = Challenge()
+                    activeChallenge = newChallenge
+                    path.append(newChallenge)
+                } label: {
+                    Text("Start 80 Hard")
                         .font(.title2.bold())
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
+                            LinearGradient(colors: [.red, .orange, .yellow], startPoint: .leading, endPoint: .trailing)
                         )
                         .foregroundColor(.white)
                         .cornerRadius(15)
                         .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 5)
                 }
                 .padding(.top, 50)
-                if hasCompletedChallenge {
-                    NavigationLink {
-                        PreviousResults()
+                
+                if hasPreviousChallenges() {
+                    Button {
+                        path.append(Navigation.previousResults)
                     } label: {
-                        Text("Previous results")
+                        Text("Show previous challenges")
                             .foregroundStyle(.white)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.horizontal)
             .padding(.bottom, 50)
         }
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .background(
             LinearGradient(colors: [.black, .gray.opacity(0.7)], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
         )
-        .scrollBounceBehavior(.basedOnSize)
-        .scrollIndicators(.hidden)
     }
-}
-#Preview {
-    StartScreen(hasCompletedChallenge: true)
+    
+    func hasActiveChallenge() -> Bool {
+        return challenges.contains(where: { $0.status == .inProgress }) ? true : false
+    }
+    
+    func hasPreviousChallenges() -> Bool {
+        return challenges.contains(where: { $0.status != .inProgress }) ? true : false
+    }
 }

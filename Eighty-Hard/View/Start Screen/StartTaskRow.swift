@@ -20,13 +20,14 @@ struct StartTaskRow: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: systemImage)
-                .foregroundColor(.white)
-                .frame(width: 24)
-            Text("\(number). \(task)")
+            Text("\(number).")
                 .bold()
-                .foregroundColor(.white)
+            Image(systemName: systemImage)
+                .frame(width: 24)
+            Text("\(task)")
+                .bold()
         }
+        .foregroundColor(.white)
         .padding(.vertical, 5)
     }
 }

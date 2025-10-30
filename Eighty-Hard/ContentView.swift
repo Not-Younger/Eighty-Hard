@@ -10,29 +10,30 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var challenges: [Challenge]
-    @Query private var inProgressChallenges: [Challenge]
-    @Query private var completedChallenges: [Challenge]
     
-    init() {
-        _inProgressChallenges = Query(filter: #Predicate {
-            $0.isCompleted == false
-        })
-        _completedChallenges = Query(filter: #Predicate {
-            $0.isCompleted == true
-        })
-    }
+    @State private var path = NavigationPath()
+    @State private var activeChallenge: Challenge? = nil
     
     var body: some View {
-        NavigationStack {
-            if challenges.isEmpty {
-                StartScreen(hasCompletedChallenge: false)
-            } else if let currentChallenge = inProgressChallenges.first {
-                HomeView(challenge: currentChallenge)
-            } else {
-                // No active challenge
-                StartScreen(hasCompletedChallenge: true)
-            }
+        NavigationStack(path: $path) {
+            StartScreen(activeChallenge: $activeChallenge, path: $path)
+                .navigationDestination(for: Challenge.self) { challenge in
+                    HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
+                }
+                .navigationDestination(for: Navigation.self) { navigation in
+                    switch navigation {
+                    case .previousResults:
+                        PreviousResultsView(path: $path)
+                    case .overview(let challenge):
+                        OverviewView(challenge: challenge, path: $path)
+                    case .tasks(let day, let dayNumber):
+                        if let day {
+                            TasksView(day: day)
+                        } else {
+                            Text("No data for day \(dayNumber)")
+                        }
+                    }
+                }
         }
     }
 }
@@ -42,7 +43,7 @@ struct ContentView: View {
     let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
     
     let challenge = Challenge()
-    challenge.isCompleted = true
+    challenge.status = .completed
     container.mainContext.insert(challenge)
     
     return ContentView()

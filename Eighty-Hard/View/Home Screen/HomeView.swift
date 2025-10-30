@@ -12,6 +12,9 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Bindable var challenge: Challenge
+    @Binding var activeChallenge: Challenge?
+    @Binding var path: NavigationPath
+    
     @State private var isShowingSettings = false
     
     var body: some View {
@@ -36,15 +39,15 @@ struct HomeView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    OverviewView(challenge: challenge)
+                Button {
+                    path.append(Navigation.overview(challenge: challenge))
                 } label: {
                     Image(systemName: "calendar")
                 }
             }
         }
         .sheet(isPresented: $isShowingSettings) {
-            SettingsView(challenge: challenge)
+            SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
         }
         .onAppear {
             if let currentDay = challenge.currentDay {
@@ -65,17 +68,5 @@ struct HomeView: View {
                 challenge.days?.append(newDay)
             }
         }
-    }
-}
-
-#Preview {
-    let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
-    
-    let challenge = Challenge()
-    
-    NavigationStack {
-        HomeView(challenge: challenge)
-            .modelContainer(container)
     }
 }

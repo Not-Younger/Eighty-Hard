@@ -13,14 +13,15 @@ class Challenge: Identifiable {
     var id: String = UUID().uuidString
     var startDate: Date = Date()
     var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 80)
-    var isCompleted: Bool = false
-    var isEnded: Bool = false
-    
+    var statusRaw: String = ChallengeStatus.inProgress.rawValue
+
     @Relationship(deleteRule: .cascade)
     var days: [Day]?
     
     init() { }
-    
+}
+
+extension Challenge {
     var currentDay: Day? {
         let days = self.days ?? []
         let sortedDays = days.sorted { $0.date < $1.date }
@@ -44,4 +45,15 @@ class Challenge: Identifiable {
         guard totalTasks > 0 else { return 0 }
         return (Double(completedTasks) / Double(totalTasks)) * 100
     }
+    
+    var status: ChallengeStatus {
+        get { ChallengeStatus(rawValue: statusRaw) ?? .inProgress }
+        set { statusRaw = newValue.rawValue }
+    }
+}
+
+enum ChallengeStatus: String {
+    case inProgress = "In Progress"
+    case completed = "Completed"
+    case quit = "Quit"
 }
