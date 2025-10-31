@@ -24,7 +24,7 @@ struct StartScreen: View {
                     Circle()
                         .stroke(lineWidth: 8)
                         .foregroundStyle(
-                            LinearGradient(colors: [.red, .orange, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
                         )
                         .frame(width: 180, height: 180)
                         .rotationEffect(.degrees(animateGradient ? 360 : 0))
@@ -121,7 +121,7 @@ struct StartScreen: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            LinearGradient(colors: [.red, .orange, .yellow], startPoint: .leading, endPoint: .trailing)
+                            LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
                         )
                         .foregroundColor(.white)
                         .cornerRadius(15)

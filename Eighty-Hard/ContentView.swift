@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var challenges: [Challenge]
     
     @State private var path = NavigationPath()
     @State private var activeChallenge: Challenge? = nil
@@ -17,6 +18,12 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             StartScreen(activeChallenge: $activeChallenge, path: $path)
+                .onAppear {
+                    if let currentChallenge = challenges.first(where: { $0.status == .inProgress }) {
+                        activeChallenge = currentChallenge
+                        path.append(currentChallenge)
+                    }
+                }
                 .preferredColorScheme(.dark)
                 .navigationDestination(for: Challenge.self) { challenge in
                     HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
@@ -44,7 +51,7 @@ struct ContentView: View {
     let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
     
     let challenge = Challenge()
-    challenge.status = .completed
+//    challenge.status = .completed
     container.mainContext.insert(challenge)
     
     return ContentView()

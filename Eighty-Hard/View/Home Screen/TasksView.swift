@@ -35,16 +35,10 @@ struct TasksView: View {
     // Computed color based on completion percentage
     private var progressColor: Color {
         let fraction = Double(completedCount) / Double(totalCount)
-        
         switch fraction {
-        case 0..<0.5:
-            return .red
-        case 0.5..<0.75:
-            return .orange
-        case 0.75..<1:
-            return .yellow
+        case 1: return .red
         default:
-            return .green // 100% completion
+            return .orange
         }
     }
     

@@ -5,7 +5,7 @@
 //  Created by Jonathan Young on 10/27/25.
 //
 
-import Foundation
+import SwiftUI
 import SwiftData
 
 @Model
@@ -58,3 +58,31 @@ class Day: Identifiable {
     static var meditateTaskText: String = "Meditate 10 minutes."
     static var socialMediaTaskText: String = "Less than 20 minutes of social media."
 }
+
+extension Day {
+    var completionColor: Color {
+        let tasks = [
+            self.didDrinkWater,
+            self.didWorkout,
+            self.didDiet,
+            self.didStayUnderDrinkLimit,
+            self.didReading,
+            self.didColdShower,
+            self.didCriticalTasks,
+            self.didMeditate,
+            self.didSocialMediaLimit
+        ]
+        
+        let fraction = Double(tasks.filter { $0 }.count) / Double(tasks.count)
+        
+        switch fraction {
+        case 0.0..<0.2: return Color.red.opacity(0.3)
+        case 0.2..<0.4: return Color.red.opacity(0.4)
+        case 0.4..<0.6: return Color.red.opacity(0.5)
+        case 0.6..<0.8: return Color.red.opacity(0.6)
+        case 0.8..<0.99: return Color.red.opacity(0.7)
+        default:        return Color.red.opacity(0.8)
+        }
+    }
+}
+

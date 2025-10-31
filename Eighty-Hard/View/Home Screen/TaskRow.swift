@@ -15,7 +15,7 @@ struct TaskRow: View {
     var body: some View {
         HStack {
             Image(systemName: isComplete ? "checkmark.circle.fill" : "circle")
-            .foregroundColor(isComplete ? .green : .gray)
+            .foregroundColor(isComplete ? .red : .gray)
             .font(.title)
             .onTapGesture {
                 withAnimation {

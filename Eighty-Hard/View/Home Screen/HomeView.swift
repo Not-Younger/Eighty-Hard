@@ -20,9 +20,22 @@ struct HomeView: View {
     var body: some View {
         VStack {
             if let currentDay = challenge.currentDay {
-                ScrollView {
-                    TasksView(day: currentDay)
+                Group {
+                    if currentDay.completedTasks == 9 {
+                        ScrollView {
+                            TasksView(day: currentDay)
+                        }
+                        .background(
+                            LinearGradient(colors: [.black, .red], startPoint: .top, endPoint: .bottom)
+                                .ignoresSafeArea()
+                        )
+                    } else {
+                        ScrollView {
+                            TasksView(day: currentDay)
+                        }
+                    }
                 }
+                .scrollIndicators(.hidden)
                 .scrollBounceBehavior(.basedOnSize)
             } else {
                 ProgressView()
@@ -30,6 +43,8 @@ struct HomeView: View {
         }
         .navigationTitle("80 Hard")
         .navigationBarBackButtonHidden(true)
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
