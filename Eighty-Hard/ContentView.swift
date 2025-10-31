@@ -42,6 +42,8 @@ struct ContentView: View {
                         }
                     case .alreadyStarted:
                         AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
+                    case .alreadyStartedDataInput(let challenge):
+                        AlreadyStartedDataInputView(challenge: challenge, path: $path)
                     }
                 }
         }

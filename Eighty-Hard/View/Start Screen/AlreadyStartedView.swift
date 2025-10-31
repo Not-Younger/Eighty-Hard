@@ -43,35 +43,36 @@ struct AlreadyStartedView: View {
         .overlay {
             VStack {
                 Spacer()
-                
-                Button {
-                    let newChallenge = Challenge()
-                    newChallenge.startDate = startDate
-                    
-                    // Calculate number of days between startDate and today (inclusive)
-                    let totalDays = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day ?? 0
-                    let completedDays = max(0, min(totalDays + 1, 80)) // Clamp between 0–80
-                    
-                    for i in 0...completedDays {
-                        let newDay = Day(number: i)
-                        newChallenge.days?.append(newDay)
+                HStack {
+                    Spacer()
+                    Button {
+                        let newChallenge = Challenge()
+                        newChallenge.startDate = startDate
+    
+                        // Calculate number of days between startDate and today (inclusive)
+                        let totalDays = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day ?? 0
+                        let completedDays = max(0, min(totalDays + 1, 80)) // Clamp between 0–80
+    
+                        for i in 0...completedDays {
+                            let newDay = Day(number: i)
+                            newChallenge.days?.append(newDay)
+                        }
+    
+                        activeChallenge = newChallenge
+                        path.append(Navigation.alreadyStartedDataInput(challenge: newChallenge))
+                    } label: {
+                        Text("Continue")
+                            .font(.title2.bold())
+                            .padding()
+                            .background(
+                                LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
+                            )
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                            .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 5)
                     }
-                    
-                    activeChallenge = newChallenge
-                    path.append(newChallenge)
-                } label: {
-                    Text("Continue 80 Hard")
-                        .font(.title2.bold())
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
-                        )
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
-                        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 5)
+                    .padding()
                 }
-                .padding()
             }
         }
     }
