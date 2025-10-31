@@ -149,10 +149,10 @@ struct TasksView: View {
                     }
                     .padding(.leading)
                     .padding(.leading)
-                    .alert("Finish Critical Tasks", isPresented: $isShowingCriticalTaskAlert) {
+                    .alert("Not Quite Yet", isPresented: $isShowingCriticalTaskAlert) {
                         Button("OK") { }
                     } message: {
-                        Text("You can finish your critical tasks once they are filled in and checked off.")
+                        Text("Make sure all your critical tasks are added and checked off before finishing.")
                     }
                 }
                 Spacer()

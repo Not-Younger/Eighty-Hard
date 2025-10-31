@@ -38,7 +38,7 @@ struct ContentView: View {
                         if let day {
                             TasksView(day: day)
                         } else {
-                            Text("No data for day \(dayNumber)")
+                            NoDataView(dayNumber: dayNumber, path: $path)
                         }
                     case .alreadyStarted:
                         AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
