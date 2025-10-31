@@ -33,7 +33,7 @@ struct ChallengeGradeView: View {
     }
     
     private var gradeColor: Color {
-        guard let grade = grade else { return .blue }
+        guard let grade = grade else { return .red }
         switch grade {
         case "S": return .purple
         case "A": return .green

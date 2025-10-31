@@ -57,7 +57,7 @@ struct OverviewView: View {
                     .padding(.vertical, 40)
                     
                     ChallengeGradeView(challenge: challenge)
-                        .padding()
+                        .padding(.horizontal)
                     
                     // Grid of days
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns), spacing: 8) {
