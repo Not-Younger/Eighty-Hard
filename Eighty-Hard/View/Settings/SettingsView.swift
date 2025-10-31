@@ -27,7 +27,6 @@ struct SettingsView: View {
         }
         .alert("Are you sure you want to stop 80 Hard?", isPresented: $isShowingEndChallengeAlert) {
             Button("Delete Challenge", role: .destructive) {
-                dismiss()
                 modelContext.delete(challenge)
                 activeChallenge = nil
                 path.removeLast(path.count)

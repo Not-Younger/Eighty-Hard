@@ -15,8 +15,6 @@ struct HomeView: View {
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
     
-    @State private var isShowingSettings = false
-    
     var body: some View {
         VStack {
             if let currentDay = challenge.currentDay {
@@ -48,14 +46,14 @@ struct HomeView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-                    
+                    path.append(Navigation.moreInfo)
                 } label: {
                     Image(systemName: "info.circle")
                 }
             }
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    isShowingSettings = true
+                    path.append(Navigation.settingsPage(challenge: challenge))
                 } label: {
                     Image(systemName: "gearshape")
                 }
@@ -65,9 +63,6 @@ struct HomeView: View {
                     Image(systemName: "calendar")
                 }
             }
-        }
-        .sheet(isPresented: $isShowingSettings) {
-            SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
         }
         .onAppear {
             if let currentDay = challenge.currentDay {
@@ -88,5 +83,23 @@ struct HomeView: View {
                 challenge.days?.append(newDay)
             }
         }
+    }
+}
+
+#Preview {
+    @Previewable @State var challenge = Challenge()
+    @Previewable @State var activeChallenge: Challenge? = Challenge()
+    @Previewable @State var path = NavigationPath()
+    let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
+    
+    challenge.status = .completed
+    container.mainContext.insert(challenge)
+    
+    return NavigationStack {
+        HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
+            .modelContainer(container)
+            .preferredColorScheme(.dark)
+            .tint(.red)
     }
 }

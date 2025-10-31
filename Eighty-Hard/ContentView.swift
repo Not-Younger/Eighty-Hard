@@ -44,10 +44,14 @@ struct ContentView: View {
                         AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
                     case .alreadyStartedDataInput(let challenge):
                         AlreadyStartedDataInputView(challenge: challenge, path: $path)
+                    case .moreInfo:
+                        MoreInfoView(path: $path)
+                    case .settingsPage(let challenge):
+                        SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
                     }
                 }
         }
-        .accentColor(.red)
+        .tint(.red)
     }
 }
 

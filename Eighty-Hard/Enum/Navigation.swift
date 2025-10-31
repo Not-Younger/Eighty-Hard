@@ -13,4 +13,6 @@ enum Navigation: Hashable {
     case tasks(day: Day?, dayNumber: Int)
     case alreadyStarted
     case alreadyStartedDataInput(challenge: Challenge)
+    case moreInfo
+    case settingsPage(challenge: Challenge)
 }
