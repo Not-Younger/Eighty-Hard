@@ -43,65 +43,65 @@ struct MoreInfoView: View {
                 VStack(alignment: .leading, spacing: 15) {
                     StartScreenTaskRow(
                         number: 1,
-                        title: "Drink a gallon of water daily.",
-                        description: "Stay hydrated to improve focus, recovery, and energy.",
-                        systemImage: "drop.fill"
+                        title: Day.waterTaskTitle,
+                        description: Day.waterTaskDescription,
+                        systemImage: Day.waterTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 2,
-                        title: "1 hour workout or 45 minutes of cardio (minimum).",
-                        description: "Push your limits every day — no excuses.",
-                        systemImage: "figure.walk"
+                        title: Day.workoutTaskTitle,
+                        description: Day.workoutTaskDescription,
+                        systemImage: Day.workoutTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 3,
-                        title: "Stick to a diet.",
-                        description: "Choose a nutrition plan and follow it strictly — no cheat meals.",
-                        systemImage: "leaf.fill"
+                        title: Day.dietTaskTitle,
+                        description: Day.dietTaskDescription,
+                        systemImage: Day.dietTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 4,
-                        title: "Alcoholic drink limit.",
-                        description: "Limit alcohol to a maximum of 2 days per week — up to 6 drinks per day, and no more than 11 total for the week.",
-                        systemImage: "wineglass"
+                        title: Day.alcoholTaskTitle,
+                        description: Day.alcoholTaskDescription,
+                        systemImage: Day.alcoholTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 5,
-                        title: "Read 10 pages.",
-                        description: "Feed your mind with something positive or educational daily.",
-                        systemImage: "book.fill"
+                        title: Day.readingTaskTitle,
+                        description: Day.readingTaskDescription,
+                        systemImage: Day.readingTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 6,
-                        title: "Take a 5 minute cold shower.",
-                        description: "Build mental toughness and increase alertness.",
-                        systemImage: "snowflake"
+                        title: Day.coldShowerTaskTitle,
+                        description: Day.coldShowerTaskDescription,
+                        systemImage: Day.coldShowerTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 7,
-                        title: "2 critical tasks.",
-                        description: "Focus on two meaningful goals that move you forward.",
-                        systemImage: "checkmark.seal.fill"
+                        title: Day.meditateTaskTitle,
+                        description: Day.meditateTaskTitle,
+                        systemImage: Day.meditateTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 8,
-                        title: "Meditate 10 minutes.",
-                        description: "Quiet your mind and stay grounded in the process.",
-                        systemImage: "brain.head.profile"
+                        title: Day.socialMediaTaskTitle,
+                        description: Day.socialMediaTaskDescription,
+                        systemImage: Day.socialMediaTaskIcon
                     )
                     
                     StartScreenTaskRow(
                         number: 9,
-                        title: "Less than 20 minutes of social media.",
-                        description: "Reclaim your attention and focus on what matters.",
-                        systemImage: "person.crop.circle.badge.clock"
+                        title: Day.criticalTaskTitle,
+                        description: Day.criticalTaskDescription,
+                        systemImage: Day.criticalTaskIcon
                     )
                 }
                 .padding(.horizontal)

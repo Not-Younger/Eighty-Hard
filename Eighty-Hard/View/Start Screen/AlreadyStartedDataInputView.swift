@@ -158,7 +158,8 @@ struct AlreadyStartedDataInputView: View {
         newDay.didReading = true
         newDay.didColdShower = true
         newDay.didDiet = true
-        newDay.didCriticalTasks = true
+        newDay.didCriticalTaskOne = true
+        newDay.didCriticalTaskTwo = true
         newDay.didSocialMediaLimit = true
         newDay.didStayUnderDrinkLimit = true
         newDay.didMeditate = true

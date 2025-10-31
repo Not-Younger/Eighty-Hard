@@ -10,17 +10,18 @@ import SwiftUI
 struct TasksView: View {
     @Bindable var day: Day
     
+    @State private var isShowingCriticalTaskAlert: Bool = false
+    
     private var tasks: [(String, Binding<Bool>)] {
         [
-            (Day.waterTaskText, $day.didDrinkWater),
-            (Day.workoutTaskText, $day.didWorkout),
-            (Day.dietTaskText, $day.didDiet),
-            (Day.alcoholTaskText, $day.didStayUnderDrinkLimit),
-            (Day.readingTaskText, $day.didReading),
-            (Day.coldShowerTaskText, $day.didColdShower),
-            (Day.criticalTaskText, $day.didCriticalTasks),
-            (Day.meditateTaskText, $day.didMeditate),
-            (Day.socialMediaTaskText, $day.didSocialMediaLimit)
+            (Day.waterTaskTitle, $day.didDrinkWater),
+            (Day.workoutTaskTitle, $day.didWorkout),
+            (Day.dietTaskTitle, $day.didDiet),
+            (Day.alcoholTaskTitle, $day.didStayUnderDrinkLimit),
+            (Day.readingTaskTitle, $day.didReading),
+            (Day.coldShowerTaskTitle, $day.didColdShower),
+            (Day.meditateTaskTitle, $day.didMeditate),
+            (Day.socialMediaTaskTitle, $day.didSocialMediaLimit)
         ]
     }
     
@@ -44,7 +45,6 @@ struct TasksView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            
             VStack(alignment: .leading, spacing: 8) {
                 Text("Day \(day.number)")
                     .font(.title)
@@ -84,10 +84,79 @@ struct TasksView: View {
                             }
                         ))
                     }
+                    HStack {
+                        Image(systemName: day.didCriticalTasks ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(day.didCriticalTasks ? .red : .gray)
+                            .font(.title)
+                            .onTapGesture {
+                                withAnimation {
+                                    if day.critcalTaskOne.isEmpty || day.critcalTaskTwo.isEmpty {
+                                        isShowingCriticalTaskAlert.toggle()
+                                    } else if !day.critcalTaskOne.isEmpty && !day.critcalTaskTwo.isEmpty {
+                                        let newValue = !day.didCriticalTasks
+                                        day.didCriticalTaskOne = newValue
+                                        day.didCriticalTaskTwo = newValue
+                                    }
+                                }
+                            }
+                        Text(Day.criticalTaskTitle)
+                    }
+                    Group {
+                        HStack {
+                            Image(systemName: day.didCriticalTaskOne ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(day.didCriticalTaskOne ? .red : .gray)
+                                .font(.title)
+                                .onTapGesture {
+                                    withAnimation {
+                                        if day.critcalTaskOne.isEmpty {
+                                            isShowingCriticalTaskAlert.toggle()
+                                        } else {
+                                            day.didCriticalTaskOne.toggle()
+                                        }
+                                    }
+                                }
+                            TextField("Task One", text: $day.critcalTaskOne)
+                                .onChange(of: day.critcalTaskOne) { _, newValue in
+                                    withAnimation {
+                                        if newValue.isEmpty {
+                                            day.didCriticalTaskOne = false
+                                        }
+                                    }
+                                }
+                        }
+                        HStack {
+                            Image(systemName: day.didCriticalTaskTwo ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(day.didCriticalTaskTwo ? .red : .gray)
+                                .font(.title)
+                                .onTapGesture {
+                                    withAnimation {
+                                        if day.critcalTaskTwo.isEmpty {
+                                            isShowingCriticalTaskAlert.toggle()
+                                        } else {
+                                            day.didCriticalTaskTwo.toggle()
+                                        }
+                                    }
+                                }
+                            TextField("Task Two", text: $day.critcalTaskTwo)
+                                .onChange(of: day.critcalTaskTwo) { _, newValue in
+                                    withAnimation {
+                                        if newValue.isEmpty {
+                                            day.didCriticalTaskTwo = false
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.leading)
+                    .padding(.leading)
+                    .alert("Finish Critical Tasks", isPresented: $isShowingCriticalTaskAlert) {
+                        Button("OK") { }
+                    } message: {
+                        Text("You can finish your critical tasks once they are filled in and checked off.")
+                    }
                 }
                 Spacer()
             }
-            
             Spacer()
         }
         .padding()
