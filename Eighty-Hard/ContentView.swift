@@ -40,6 +40,8 @@ struct ContentView: View {
                         } else {
                             Text("No data for day \(dayNumber)")
                         }
+                    case .alreadyStarted:
+                        AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
                     }
                 }
         }
@@ -52,7 +54,7 @@ struct ContentView: View {
     let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
     
     let challenge = Challenge()
-//    challenge.status = .completed
+    challenge.status = .completed
     container.mainContext.insert(challenge)
     
     return ContentView()

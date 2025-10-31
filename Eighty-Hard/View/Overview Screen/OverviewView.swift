@@ -86,6 +86,7 @@ struct OverviewView: View {
             }
             .scrollIndicators(.hidden)
         }
+        .navigationTitle("Overview")
     }
 }
 

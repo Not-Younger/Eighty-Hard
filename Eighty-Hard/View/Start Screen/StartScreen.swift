@@ -129,6 +129,14 @@ struct StartScreen: View {
                 }
                 .padding(.top, 50)
                 
+                Button {
+                    path.append(Navigation.alreadyStarted)
+                } label: {
+                    Text("Already started?")
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
                 if hasPreviousChallenges() {
                     Button {
                         path.append(Navigation.previousResults)

@@ -48,12 +48,17 @@ struct HomeView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
+                    
+                } label: {
+                    Image(systemName: "info.circle")
+                }
+            }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
                     isShowingSettings = true
                 } label: {
                     Image(systemName: "gearshape")
                 }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     path.append(Navigation.overview(challenge: challenge))
                 } label: {

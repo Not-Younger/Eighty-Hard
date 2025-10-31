@@ -68,9 +68,9 @@ struct PreviousResultsView: View {
                     .listRowSeparator(.visible, edges: [.top, .bottom])
                 }
                 .listStyle(.plain)
-                .navigationTitle("Previous Challenges")
             }
         }
+        .navigationTitle("Previous Challenges")
         .scrollIndicators(.hidden)
         .scrollBounceBehavior(.basedOnSize)
         .background(
