@@ -56,6 +56,9 @@ struct SettingsView: View {
                         }
                     }
                 }
+                .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
+                    return 0
+                }
             }
         }
         .navigationTitle("Settings")

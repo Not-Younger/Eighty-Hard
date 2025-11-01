@@ -40,22 +40,27 @@ struct PreviousResultsView: View {
                             Button {
                                 path.append(Navigation.overview(challenge: challenge))
                             } label: {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Challenge \(challenge.id.prefix(4))")
-                                        .font(.headline)
-                                    
-                                    Text("\(challenge.startDate.formatted(date: .abbreviated, time: .omitted)) → \(challenge.endDate.formatted(date: .abbreviated, time: .omitted))")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                    
-                                    HStack {
-                                        ProgressView(value: challenge.completionPercentage)
-                                            .tint(.green)
-                                            .frame(maxWidth: 120)
-                                        Text(challenge.completedTasks.description + " / " + challenge.totalTasks.description)
-                                            .font(.caption)
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Challenge \(challenge.id.prefix(8))")
+                                            .font(.headline)
+                                        
+                                        Text("\(challenge.startDate.formatted(date: .abbreviated, time: .omitted)) → \(challenge.endDate.formatted(date: .abbreviated, time: .omitted))")
+                                            .font(.subheadline)
                                             .foregroundStyle(.secondary)
+                                        
+                                        HStack {
+                                            ProgressView(value: challenge.completionPercentage)
+                                                .tint(.green)
+                                                .frame(maxWidth: 120)
+                                            Text(challenge.completedTasks.description + " / " + challenge.totalTasks.description)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
                                     }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 16))
                                 }
                                 .padding(.vertical, 6)
                                 .foregroundStyle(.white)
