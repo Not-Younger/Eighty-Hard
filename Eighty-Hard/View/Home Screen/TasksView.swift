@@ -25,17 +25,9 @@ struct TasksView: View {
         ]
     }
     
-    private var completedCount: Int {
-        tasks.filter { $0.1.wrappedValue }.count
-    }
-    
-    private var totalCount: Int { tasks.count }
-    
-    private var isAllCompleted: Bool { completedCount == totalCount }
-    
     // Computed color based on completion percentage
     private var progressColor: Color {
-        let fraction = Double(completedCount) / Double(totalCount)
+        let fraction = Double(day.completedTasks) / Double(9)
         switch fraction {
         case 1: return .red
         default:
@@ -51,14 +43,14 @@ struct TasksView: View {
                     .bold()
                     .padding(.bottom)
                 
-                Text(isAllCompleted ? "🎉 All tasks completed!" : "\(completedCount) of \(totalCount) tasks completed")
+                Text(day.completedTasks == 9 ? "🎉 All tasks completed!" : "\(day.completedTasks) of 9 tasks completed")
                     .font(.headline)
-                    .foregroundColor(isAllCompleted ? .primary : .secondary)
-                    .animation(.easeInOut(duration: 0.3), value: completedCount)
+                    .foregroundColor(day.completedTasks == 9 ? .primary : .secondary)
+                    .animation(.easeInOut(duration: 0.3), value: day.completedTasks)
                 
-                ProgressView(value: Double(completedCount), total: Double(totalCount))
+                ProgressView(value: Double(day.completedTasks), total: Double(9))
                     .accentColor(progressColor)
-                    .animation(.easeInOut(duration: 0.3), value: completedCount)
+                    .animation(.easeInOut(duration: 0.3), value: day.completedTasks)
             }
             .padding(.bottom)
             
@@ -77,7 +69,7 @@ struct TasksView: View {
                                 impact.impactOccurred()
                                 
                                 // Celebration haptic if all tasks completed
-                                if completedCount == totalCount {
+                                if day.completedTasks == 9 {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                 }
