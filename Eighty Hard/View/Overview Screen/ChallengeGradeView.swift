@@ -15,7 +15,7 @@ struct ChallengeGradeView: View {
     
     // completionPercentage as fraction 0.0–1.0
     private var completionFraction: Double {
-        min(max(challenge.completionPercentage / 100, 0), 1)
+        min(max(challenge.completionPercentage, 0), 1)
     }
     
     private var grade: String? {

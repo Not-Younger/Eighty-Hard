@@ -51,7 +51,7 @@ struct OverviewView: View {
                             )
                             .frame(width: 180, height: 180)
                         
-                        Text(daysCompletionFraction >= 1.0 ? "Complete!" : "\(Int(daysCompletionFraction * 100))%")
+                        Text(daysCompletionFraction >= 1.0 ? "Last Day!" : "\(Int(daysCompletionFraction * 100))%")
                             .font(.system(size: 32, weight: .bold))
                     }
                     .padding(.vertical, 40)
@@ -98,7 +98,7 @@ struct OverviewView: View {
     let challenge = Challenge()
     challenge.status = .completed
     
-    for i in 0...1 {
+    for i in 0...80 {
         let newDay = Day(number: i)
         newDay.didDrinkWater = true
         newDay.didWorkout = true
