@@ -97,8 +97,22 @@ struct PreviousResultsView: View {
     let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
     
-    for _ in 0..<10 {
+    for _ in 0..<1 {
         let challenge = Challenge()
+        for i in 0..<80 {
+            let newDay = Day(number: i)
+            challenge.days?.append(newDay)
+            newDay.didDrinkWater = true
+            newDay.didWorkout = true
+            newDay.didReading = true
+            newDay.didColdShower = true
+            newDay.didDiet = true
+            newDay.didCriticalTaskOne = true
+            newDay.didCriticalTaskTwo = true
+            newDay.didSocialMediaLimit = true
+            newDay.didStayUnderDrinkLimit = true
+            newDay.didMeditate = true
+        }
         challenge.status = .completed
         container.mainContext.insert(challenge)
     }

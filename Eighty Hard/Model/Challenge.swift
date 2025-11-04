@@ -44,7 +44,7 @@ extension Challenge {
     
     var completionPercentage: Double {
         guard totalTasks > 0 else { return 0 }
-        return (Double(completedTasks) / Double(totalTasks)) * 100
+        return (Double(completedTasks) / Double(totalTasks))
     }
     
     var status: ChallengeStatus {
