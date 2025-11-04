@@ -1,14 +1,16 @@
 //
-//  OverviewView.swift
+//  AlreadyStartedDataInputView.swift
 //  Eighty-Hard
 //
-//  Created by Jonathan Young on 10/27/25.
+//  Created by Jonathan Young on 10/31/25.
 //
 
 import SwiftData
 import SwiftUI
 
-struct OverviewView: View {
+struct AlreadyStartedDataInputView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     @Bindable var challenge: Challenge
     @Binding var path: NavigationPath
     
@@ -56,7 +58,32 @@ struct OverviewView: View {
                     }
                     .padding(.vertical, 40)
                     
-                    ChallengeGradeView(challenge: challenge)
+                    HStack(alignment: .center, spacing: 12) {
+                        // Circle with grade or encouragement color
+                        ZStack {
+                            Circle()
+                                .fill(.red)
+                                .frame(width: 60, height: 60)
+                            
+                            Image(systemName: "text.document.fill")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Sync Your Journey")
+                                .bold()
+                            Text("You’ve already put in the work — now let’s make sure your progress reflects that. Tap each past day and update your completed tasks.")
+                                .font(.subheadline)
+                                .foregroundColor(.primary)
+                                .lineLimit(nil)
+                        }
+
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
                         .padding(.horizontal)
                     
                     // Grid of days
@@ -71,7 +98,7 @@ struct OverviewView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(day?.completionColor ?? Color.gray.opacity(0.3))
-                                        .frame(width: itemSize, height: itemSize)
+                                        .frame(width: abs(itemSize), height: abs(itemSize))
                                     
                                     Text("\(dayNumber)")
                                         .font(.system(size: itemSize * 0.3, weight: .bold))
@@ -82,11 +109,37 @@ struct OverviewView: View {
                     }
                     .padding(.horizontal, 16)
                 }
-                .padding(.bottom, 40)
+                .padding(.bottom, 140)
             }
             .scrollIndicators(.hidden)
+            .overlay {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            modelContext.insert(challenge)
+                            path.removeLast(path.count)
+                            path.append(challenge)
+                        } label: {
+                            Text("Continue 80 Hard")
+                                .font(.title2.bold())
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(
+                                    LinearGradient(colors: [.red, .orange], startPoint: .leading, endPoint: .trailing)
+                                )
+                                .foregroundColor(.white)
+                                .cornerRadius(15)
+                                .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 5)
+                        }
+                        .padding()
+                    }
+                }
+            }
         }
-        .navigationTitle("Overview")
+        .navigationTitle("Data Input")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -116,7 +169,7 @@ struct OverviewView: View {
     container.mainContext.insert(challenge)
     
     return NavigationStack {
-        OverviewView(challenge: challenge, path: $path)
+        AlreadyStartedDataInputView(challenge: challenge, path: $path)
             .modelContainer(container)
             .preferredColorScheme(.dark)
     }

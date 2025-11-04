@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C405D2612EB02DB000EFD82E"
-               BuildableName = "Eighty-Hard.app"
-               BlueprintName = "Eighty-Hard"
-               ReferencedContainer = "container:Eighty-Hard.xcodeproj">
+               BuildableName = "Eighty Hard.app"
+               BlueprintName = "Eighty Hard"
+               ReferencedContainer = "container:Eighty Hard.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C405D2612EB02DB000EFD82E"
-            BuildableName = "Eighty-Hard.app"
-            BlueprintName = "Eighty-Hard"
-            ReferencedContainer = "container:Eighty-Hard.xcodeproj">
+            BuildableName = "Eighty Hard.app"
+            BlueprintName = "Eighty Hard"
+            ReferencedContainer = "container:Eighty Hard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C405D2612EB02DB000EFD82E"
-            BuildableName = "Eighty-Hard.app"
-            BlueprintName = "Eighty-Hard"
-            ReferencedContainer = "container:Eighty-Hard.xcodeproj">
+            BuildableName = "Eighty Hard.app"
+            BlueprintName = "Eighty Hard"
+            ReferencedContainer = "container:Eighty Hard.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

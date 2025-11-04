@@ -27,8 +27,8 @@ struct ChallengeGradeView: View {
         case 0.75..<0.9: return "B"
         case 0.6..<0.75: return "C"
         case 0.4..<0.6: return "D"
-        case 0.1..<0.4: return "F"
-        default: return "F-"
+        case 0: return "F-"
+        default: return "F"
         }
     }
     
@@ -46,7 +46,7 @@ struct ChallengeGradeView: View {
     }
     
     private var performanceText: String {
-        let percentage = Int(completionFraction * 100)
+        let percentage = String(format: "%.2f", completionFraction * 100)
         
         // Encouragement before grading
         if (challenge.days?.count ?? 0) < minDaysForGrade {
