@@ -66,8 +66,12 @@ struct HomeView: View {
         .alert("Congratulations!", isPresented: $isShowingFinishedAlert) {
             Button("Complete") {
                 challenge.status = .completed
+                print("Challenge number of days: \(challenge.days!.count)")
+                let day81 = challenge.days!.removeLast()
+                modelContext.delete(day81) // Delete day 81
                 activeChallenge = nil
                 path.removeLast(path.count)
+                print("Challenge number of days: \(challenge.days!.count)")
             }
         } message: {
             Text("You’ve completed all 80 days. That’s insane discipline. Well done. You can view this challenge in your previous challenges list.")
