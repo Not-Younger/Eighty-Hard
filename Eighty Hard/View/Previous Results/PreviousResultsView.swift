@@ -10,7 +10,9 @@ import SwiftUI
 
 struct PreviousResultsView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var challenges: [Challenge]
+    @Query(filter: #Predicate<Challenge> { challenge in
+        challenge.statusRaw != "In Progress"
+    }) var challenges: [Challenge]
     
     @Binding var path: NavigationPath
     

@@ -5,9 +5,12 @@
 //  Created by Jonathan Young on 10/31/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MoreInfoView: View {
+    @Query private var challenges: [Challenge]
+    
     @Binding var path: NavigationPath
     
     @State private var animateGradient = false
@@ -105,9 +108,19 @@ struct MoreInfoView: View {
                     )
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 50)
+                
+                if hasPreviousChallenges() {
+                    Button {
+                        path.append(Navigation.previousResults)
+                    } label: {
+                        Text("Show previous challenges")
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
             }
             .padding(.horizontal)
+            .padding(.bottom, 50)
         }
         .navigationTitle("More Info")
         .scrollIndicators(.hidden)
@@ -117,6 +130,10 @@ struct MoreInfoView: View {
             LinearGradient(colors: [.black, .red], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
         )
+    }
+    
+    func hasPreviousChallenges() -> Bool {
+        return challenges.contains(where: { $0.status != .inProgress }) ? true : false
     }
 }
 
