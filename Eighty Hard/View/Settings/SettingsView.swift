@@ -11,7 +11,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    let challenge: Challenge
+    @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
     
@@ -34,6 +34,14 @@ struct SettingsView: View {
                             }
                         }
                     }
+                }
+                
+                Section {
+                    Toggle("Carry over critical tasks", isOn: $challenge.carryOverCriticalTasks)
+                } header: {
+                    Text("Preferences")
+                } footer: {
+                    Text("This will carry your previous day's critical tasks over to the next day.")
                 }
                 
                 Section("End or Delete Challenge") {

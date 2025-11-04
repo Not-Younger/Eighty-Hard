@@ -15,6 +15,8 @@ struct HomeView: View {
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
     
+    @State private var isShowingFinishedAlert = false
+    
     var body: some View {
         VStack {
             if let currentDay = challenge.currentDay {
@@ -59,23 +61,41 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            if let currentDay = challenge.currentDay {
-                let dayNumber = challenge.days!.count + 1
-                if dayNumber > 80 {
-                    
-                } else if !Calendar.current.isDateInToday(currentDay.date) {
-                    let newDay = Day(number: dayNumber)
-                    newDay.challenge = challenge
-                    modelContext.insert(newDay)
-                    challenge.days?.append(newDay)
+            updateCurrentDay()
+        }
+        .alert("Congratulations!", isPresented: $isShowingFinishedAlert) {
+            Button("Complete") {
+                challenge.status = .completed
+                activeChallenge = nil
+                path.removeLast(path.count)
+            }
+        } message: {
+            Text("You’ve completed all 80 days. That’s insane discipline. Well done. You can view this challenge in your previous challenges list.")
+        }
+    }
+    
+    private func updateCurrentDay() {
+        if let currentDay = challenge.currentDay {
+            if currentDay.number > 80 {
+                isShowingFinishedAlert = true
+            } else if !Calendar.current.isDateInToday(currentDay.date) {
+                let newDay = Day(number: currentDay.number + 1)
+                print("New Day: \(newDay.number)")
+                // Carry over critical tasks if selected
+                if challenge.carryOverCriticalTasks {
+                    newDay.critcalTaskOne = currentDay.critcalTaskOne
+                    newDay.critcalTaskTwo = currentDay.critcalTaskTwo
                 }
-            } else {
-                // Day 1
-                let newDay = Day(number: 1)
                 newDay.challenge = challenge
                 modelContext.insert(newDay)
                 challenge.days?.append(newDay)
             }
+        } else {
+            // Day 1
+            let newDay = Day(number: 1)
+            newDay.challenge = challenge
+            modelContext.insert(newDay)
+            challenge.days?.append(newDay)
         }
     }
 }
@@ -87,7 +107,7 @@ struct HomeView: View {
     let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
     
-    challenge.status = .completed
+    challenge.status = .inProgress
     container.mainContext.insert(challenge)
     
     return NavigationStack {
