@@ -148,8 +148,8 @@ struct SettingsView: View {
             row.append(day.didMeditate ? "X" : "")
             row.append(day.didSocialMediaLimit ? "X" : "")
             row.append(day.didCriticalTasks ? "X" : "")
-            row.append(day.critcalTaskOne)
-            row.append(day.critcalTaskTwo)
+            row.append(day.criticalTaskOne)
+            row.append(day.criticalTaskTwo)
             
             rows.append(row)
         }

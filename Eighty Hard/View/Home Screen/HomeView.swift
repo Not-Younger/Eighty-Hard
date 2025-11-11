@@ -87,8 +87,8 @@ struct HomeView: View {
                 print("New Day: \(newDay.number)")
                 // Carry over critical tasks if selected
                 if challenge.carryOverCriticalTasks {
-                    newDay.critcalTaskOne = currentDay.critcalTaskOne
-                    newDay.critcalTaskTwo = currentDay.critcalTaskTwo
+                    newDay.criticalTaskOne = currentDay.criticalTaskOne
+                    newDay.criticalTaskTwo = currentDay.criticalTaskTwo
                 }
                 newDay.challenge = challenge
                 modelContext.insert(newDay)

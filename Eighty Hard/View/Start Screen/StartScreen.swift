@@ -15,8 +15,6 @@ struct StartScreen: View {
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
     
-    @State private var animateGradient = false
-    
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -27,8 +25,6 @@ struct StartScreen: View {
                             LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
                         )
                         .frame(width: 180, height: 180)
-                        .rotationEffect(.degrees(animateGradient ? 360 : 0))
-                        .animation(.linear(duration: 8).repeatForever(autoreverses: false), value: animateGradient)
                     
                     Text("80 Hard")
                         .font(.largeTitle)
@@ -36,7 +32,6 @@ struct StartScreen: View {
                         .foregroundColor(.white)
                 }
                 .padding(.top, 50)
-                .onAppear { animateGradient = true }
                 
                 Text("Complete these 9 tasks daily for 80 days in a row.")
                     .font(.title3)

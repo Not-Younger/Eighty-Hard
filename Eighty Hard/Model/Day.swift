@@ -11,7 +11,7 @@ import SwiftData
 @Model
 class Day: Identifiable {
     var id: String = UUID().uuidString
-    var number: Int
+    var number: Int = -1
     var date: Date = Date()
     var note: String = ""
     var didDrinkWater: Bool = false
@@ -25,8 +25,8 @@ class Day: Identifiable {
     var didMeditate: Bool = false
     var didSocialMediaLimit: Bool = false
     
-    var critcalTaskOne: String = ""
-    var critcalTaskTwo: String = ""
+    var criticalTaskOne: String = ""
+    var criticalTaskTwo: String = ""
     
     init(number: Int) {
         self.number = number
@@ -53,7 +53,7 @@ extension Day {
     static var alcoholTaskDescription: String = "Limit alcohol to a maximum of 2 days per week — up to 6 drinks per day, and no more than 11 total for the week."
     static var readingTaskDescription: String = "Feed your mind with something positive or educational daily."
     static var coldShowerTaskDescription: String = "Build mental toughness and increase alertness."
-    static var criticalTaskDescription: String = "Focus on two meaningful goals that move you forward."
+    static var criticalTaskDescription: String = " Focus on two meaningful goals that move you forward."
     static var meditateTaskDescription: String = "Quiet your mind and stay grounded in the process."
     static var socialMediaTaskDescription: String = "Reclaim your attention and focus on what matters."
     

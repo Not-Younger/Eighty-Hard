@@ -82,9 +82,9 @@ struct TasksView: View {
                             .font(.title)
                             .onTapGesture {
                                 withAnimation {
-                                    if day.critcalTaskOne.isEmpty || day.critcalTaskTwo.isEmpty {
+                                    if day.criticalTaskOne.isEmpty || day.criticalTaskTwo.isEmpty {
                                         isShowingCriticalTaskAlert.toggle()
-                                    } else if !day.critcalTaskOne.isEmpty && !day.critcalTaskTwo.isEmpty {
+                                    } else if !day.criticalTaskOne.isEmpty && !day.criticalTaskTwo.isEmpty {
                                         let newValue = !day.didCriticalTasks
                                         day.didCriticalTaskOne = newValue
                                         day.didCriticalTaskTwo = newValue
@@ -100,15 +100,15 @@ struct TasksView: View {
                                 .font(.title)
                                 .onTapGesture {
                                     withAnimation {
-                                        if day.critcalTaskOne.isEmpty {
+                                        if day.criticalTaskOne.isEmpty {
                                             isShowingCriticalTaskAlert.toggle()
                                         } else {
                                             day.didCriticalTaskOne.toggle()
                                         }
                                     }
                                 }
-                            TextField("Task One", text: $day.critcalTaskOne)
-                                .onChange(of: day.critcalTaskOne) { _, newValue in
+                            TextField("Task One", text: $day.criticalTaskOne)
+                                .onChange(of: day.criticalTaskOne) { _, newValue in
                                     withAnimation {
                                         if newValue.isEmpty {
                                             day.didCriticalTaskOne = false
@@ -122,15 +122,15 @@ struct TasksView: View {
                                 .font(.title)
                                 .onTapGesture {
                                     withAnimation {
-                                        if day.critcalTaskTwo.isEmpty {
+                                        if day.criticalTaskTwo.isEmpty {
                                             isShowingCriticalTaskAlert.toggle()
                                         } else {
                                             day.didCriticalTaskTwo.toggle()
                                         }
                                     }
                                 }
-                            TextField("Task Two", text: $day.critcalTaskTwo)
-                                .onChange(of: day.critcalTaskTwo) { _, newValue in
+                            TextField("Task Two", text: $day.criticalTaskTwo)
+                                .onChange(of: day.criticalTaskTwo) { _, newValue in
                                     withAnimation {
                                         if newValue.isEmpty {
                                             day.didCriticalTaskTwo = false
