@@ -28,79 +28,104 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section {
-                    Toggle("Tasks notifications", isOn: $isUsingNotifications.animation())
-                        .onChange(of: isUsingNotifications) { _, newValue in
-                            setNotifications()
-                        }
-                    if lnManager.isGranted && isUsingNotifications {
-                        DatePicker("Reminder time", selection: $notificationReminderTime, displayedComponents: .hourAndMinute)
-                            .onChange(of: notificationReminderTime) { _, newValue in
-                                let hours = Calendar.current.component(.hour, from: newValue)
-                                let minutes = Calendar.current.component(.minute, from: newValue)
-                                UserDefaults.standard.set(hours, forKey: "readingTimeHours")
-                                UserDefaults.standard.set(minutes, forKey: "readingTimeMinutes")
+                Group {
+                    Section {
+                        Toggle("Tasks notifications", isOn: $isUsingNotifications.animation())
+                            .onChange(of: isUsingNotifications) { _, newValue in
                                 setNotifications()
                             }
-                    } else {
-                        if !lnManager.isGranted {
-                            VStack(alignment: .center) {
-                                Button("Enable Notifications") {
-                                    lnManager.openSettings()
+                        if lnManager.isGranted && isUsingNotifications {
+                            DatePicker("Reminder time", selection: $notificationReminderTime, displayedComponents: .hourAndMinute)
+                                .onChange(of: notificationReminderTime) { _, newValue in
+                                    let hours = Calendar.current.component(.hour, from: newValue)
+                                    let minutes = Calendar.current.component(.minute, from: newValue)
+                                    UserDefaults.standard.set(hours, forKey: "readingTimeHours")
+                                    UserDefaults.standard.set(minutes, forKey: "readingTimeMinutes")
+                                    setNotifications()
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                        } else {
+                            if !lnManager.isGranted {
+                                VStack(alignment: .center) {
+                                    Button("Enable Notifications") {
+                                        lnManager.openSettings()
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                                .frame(maxWidth: .infinity)
                             }
-                            .frame(maxWidth: .infinity)
                         }
+                    } header: {
+                        Text("Daily Task Reminder")
+                    } footer: {
+                        Text("Turn on reminders to get a daily notification to complete your tasks. You can adjust the reminder time or disable it anytime.")
                     }
-                } header: {
-                    Text("Daily Task Reminder")
-                } footer: {
-                    Text("Turn on reminders to get a daily notification to complete your tasks. You can adjust the reminder time or disable it anytime.")
-                }
-
-                Section {
-                    Text("Export your data into CSV format.")
-                    if let csvURL {
-                        ShareLink(items: [csvURL]) {
+                    
+                    Section {
+                        Text("Export your data into CSV format.")
+                        if let csvURL {
+                            ShareLink(items: [csvURL]) {
+                                HStack {
+                                    Spacer()
+                                    Text("Export CSV")
+                                    Spacer()
+                                }
+                            }
+                        }
+                    } header: {
+                        Text("Export Data")
+                    } footer: {
+                        Text("Exports all nine daily tasks including both of your critical tasks for the entire challenge.")
+                    }
+                    
+                    Section {
+                        Toggle("Carry over critical tasks", isOn: $carryOverCriticalTasks)
+                    } header: {
+                        Text("Preferences")
+                    } footer: {
+                        Text("This will carry your previous day's critical tasks over to the next day.")
+                    }
+                    
+                    Section {
+                        Button {
+                            path.append(Navigation.privacyPolicy)
+                        } label: {
                             HStack {
                                 Spacer()
-                                Text("Export CSV")
+                                Text("Privacy Policy")
                                 Spacer()
                             }
                         }
-                    }
-                } header: {
-                    Text("Export Data")
-                } footer: {
-                    Text("Exports all nine daily tasks including both of your critical tasks for the entire challenge.")
-                }
-                
-                Section {
-                    Toggle("Carry over critical tasks", isOn: $carryOverCriticalTasks)
-                } header: {
-                    Text("Preferences")
-                } footer: {
-                    Text("This will carry your previous day's critical tasks over to the next day.")
-                }
-                
-                Section("End or Delete Challenge") {
-                    Button(role: .destructive) {
-                        isShowingEndChallengeAlert = true
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("Quit Challenge")
-                            Spacer()
+                        Button {
+                            path.append(Navigation.termsAndConditions)
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text("Terms & Conditions")
+                                Spacer()
+                            }
                         }
+                    } header: {
+                        Text("Legal")
                     }
-                    Button(role: .destructive) {
-                        isShowingDeleteChallengeAlert = true
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("Delete Challenge")
-                            Spacer()
+                    
+                    Section("End or Delete Challenge") {
+                        Button(role: .destructive) {
+                            isShowingEndChallengeAlert = true
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text("Quit Challenge")
+                                Spacer()
+                            }
+                        }
+                        Button(role: .destructive) {
+                            isShowingDeleteChallengeAlert = true
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text("Delete Challenge")
+                                Spacer()
+                            }
                         }
                     }
                 }

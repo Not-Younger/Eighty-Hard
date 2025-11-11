@@ -15,4 +15,6 @@ enum Navigation: Hashable {
     case alreadyStartedDataInput(challenge: Challenge)
     case moreInfo
     case settingsPage(challenge: Challenge)
+    case privacyPolicy
+    case termsAndConditions
 }

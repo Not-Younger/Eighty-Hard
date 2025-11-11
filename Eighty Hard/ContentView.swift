@@ -58,6 +58,10 @@ struct ContentView: View {
                             MoreInfoView(path: $path)
                         case .settingsPage(let challenge):
                             SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
+                        case .privacyPolicy:
+                            PrivacyPolicyView()
+                        case .termsAndConditions:
+                            TermsAndConditionsView()
                         }
                     }
                     .environment(lnManager)
