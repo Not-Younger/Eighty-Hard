@@ -150,7 +150,7 @@ struct SettingsView: View {
     }
     
     private func generateCSV(_ days: [Day]) throws -> URL {
-        let destinationURL = URL.documentsDirectory.appendingPathComponent("80Hard-\(challenge.id).csv")
+        let destinationURL = URL.documentsDirectory.appendingPathComponent("Eighty-Hard-\(challenge.id).csv")
         if FileManager.default.fileExists(atPath: destinationURL.path) {
             try FileManager.default.removeItem(at: destinationURL)
         }

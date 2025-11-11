@@ -66,6 +66,7 @@ struct PreviousResultsView: View {
                                 }
                                 .padding(.vertical, 6)
                                 .foregroundStyle(.white)
+                                .contentShape(Rectangle())
                             }
                             .buttonStyle(PlainButtonStyle())
                         }

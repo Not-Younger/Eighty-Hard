@@ -12,6 +12,9 @@ struct OverviewView: View {
     @Bindable var challenge: Challenge
     @Binding var path: NavigationPath
     
+    @State private var csvURL: URL?
+    @State private var error: Error?
+    
     let totalDots = 80
     let columns = 7
     
@@ -91,6 +94,110 @@ struct OverviewView: View {
             .scrollIndicators(.hidden)
         }
         .navigationTitle("Overview")
+        .onAppear {
+            if let days = challenge.days {
+                regenerateDocument(days)
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if let csvURL {
+                    ShareLink(items: [csvURL]) {
+                        Text("Export CSV")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func regenerateDocument(_ days: [Day]) {
+        do {
+            self.csvURL = nil
+            self.error = nil
+            let url = try generateCSV(days)
+            self.csvURL = url
+        } catch {
+            self.error = error
+        }
+    }
+    
+    private func generateCSV(_ days: [Day]) throws -> URL {
+        let destinationURL = URL.documentsDirectory.appendingPathComponent("Eighty-Hard-\(challenge.id).csv")
+        if FileManager.default.fileExists(atPath: destinationURL.path) {
+            try FileManager.default.removeItem(at: destinationURL)
+        }
+
+        var rows: [[String]] = []
+
+        // Header row
+        let headers: [String] = [
+            "Day",
+            "Water Task",
+            "Workout Task",
+            "Diet Task",
+            "Alcohol Task",
+            "Read Task",
+            "Cold Shower Task",
+            "Meditate Task",
+            "Social Media Task",
+            "Critical Tasks",
+            "Critical Task One",
+            "Critical Task Two"
+        ]
+        rows.append(headers)
+
+        // Data rows
+        for day in days {
+            var row: [String] = []
+
+            row.append("\(day.number)")
+            row.append(day.didDrinkWater ? "X" : "")
+            row.append(day.didWorkout ? "X" : "")
+            row.append(day.didDiet ? "X" : "")
+            row.append(day.didStayUnderDrinkLimit ? "X" : "")
+            row.append(day.didReading ? "X" : "")
+            row.append(day.didColdShower ? "X" : "")
+            row.append(day.didMeditate ? "X" : "")
+            row.append(day.didSocialMediaLimit ? "X" : "")
+            row.append(day.didCriticalTasks ? "X" : "")
+            row.append(day.criticalTaskOne)
+            row.append(day.criticalTaskTwo)
+            
+            rows.append(row)
+        }
+        
+        for i in days.count...80 {
+            var row: [String] = []
+            
+            row.append("\(i)")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            row.append("")
+            
+            rows.append(row)
+        }
+
+        // Convert to CSV string
+        let csvString = rows.map { row in
+            row.map { "\"\($0)\"" }.joined(separator: ",")
+        }.joined(separator: "\n")
+
+        try csvString.write(to: destinationURL, atomically: true, encoding: .utf8)
+
+        return destinationURL
+    }
+    
+    func escapeCSVField(_ field: String) -> String {
+        let escaped = field.replacingOccurrences(of: "\"", with: "\"\"")
+        return escaped
     }
 }
 
