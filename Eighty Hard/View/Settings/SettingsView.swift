@@ -25,6 +25,8 @@ struct SettingsView: View {
     @State private var isShowingEndChallengeAlert = false
     @State private var isShowingDeleteChallengeAlert = false
     
+    let websiteUrl = URL(string: "https://www.jonathanyoung.dev/apps/eighty-hard")!
+    
     var body: some View {
         VStack {
             Form {
@@ -83,6 +85,18 @@ struct SettingsView: View {
                         Text("Preferences")
                     } footer: {
                         Text("This will carry your previous day's critical tasks over to the next day.")
+                    }
+                    
+                    Section {
+                        Link(destination: websiteUrl) {
+                            HStack {
+                                Spacer()
+                                Text("Eighty Hard Website")
+                                Spacer()
+                            }
+                        }
+                    } header: {
+                        Text("More Info")
                     }
                     
                     Section {
