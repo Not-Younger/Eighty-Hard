@@ -11,11 +11,16 @@ import SwiftUI
 @main
 struct Eighty_HardApp: App {
     let container: ModelContainer = DataModel.shared.modelContainer
+    let lnManager = LocalNotificationManager()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .task {
+                    try? await lnManager.requestAuthorization()
+                }
         }
         .modelContainer(container)
+        .environment(lnManager)
     }
 }

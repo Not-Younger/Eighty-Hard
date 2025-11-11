@@ -50,6 +50,13 @@ extension Challenge {
         get { ChallengeStatus(rawValue: statusRaw) ?? .inProgress }
         set { statusRaw = newValue.rawValue }
     }
+    
+    var daysRemaining: Int {
+        let daysRemaining = 80 - (self.currentDay?.number ?? 0)
+        print(
+            "Days remaining: \(daysRemaining)")
+        return daysRemaining
+    }
 }
 
 enum ChallengeStatus: String {

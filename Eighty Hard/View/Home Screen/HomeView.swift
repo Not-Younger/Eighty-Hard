@@ -10,8 +10,12 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(LocalNotificationManager.self) private var lnManager: LocalNotificationManager
     
     @AppStorage("carryOverCriticalTasks") private var carryOverCriticalTasks: Bool = false
+    @AppStorage("isUsingNotifications") private var isUsingNotifications: Bool = false
+    @AppStorage("notificationReminderTime") private var notificationReminderTime: Date = Date()
     
     @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
@@ -78,6 +82,14 @@ struct HomeView: View {
         } message: {
             Text("You’ve completed all 80 days. That’s insane discipline. Well done. You can view this challenge in your previous challenges list.")
         }
+        .onChange(of: scenePhase) { _, newValue in
+            if newValue == .active {
+                Task {
+                    await lnManager.getCurrentSettings()
+                    setNotifications()
+                }
+            }
+        }
     }
     
     private func updateCurrentDay() {
@@ -104,9 +116,33 @@ struct HomeView: View {
             challenge.days?.append(newDay)
         }
     }
+    
+    func setNotifications() {
+        if isUsingNotifications {
+            Task {
+                lnManager.clearRequests()
+                var dateComponents = Calendar.current.dateComponents([.hour, .minute], from: notificationReminderTime)
+                for day in 0..<min(challenge.daysRemaining, 64) {
+                    dateComponents.weekday = day
+                    let uuid = "REMINDER_\(UUID().uuidString)"
+                    let localNotification = LocalNotification(
+                        identifier: uuid,
+                        title: "Daily Tasks Reminder",
+                        body: "Make sure to finalize your tasks for today!",
+                        dateComponents: dateComponents,
+                        repeats: true
+                    )
+                    await lnManager.schedule(localNotification: localNotification)
+                }
+            }
+        } else {
+            lnManager.clearRequests()
+        }
+    }
 }
 
 #Preview {
+    @Previewable @State var lnManager = LocalNotificationManager()
     @Previewable @State var challenge = Challenge()
     @Previewable @State var activeChallenge: Challenge? = Challenge()
     @Previewable @State var path = NavigationPath()
@@ -119,6 +155,7 @@ struct HomeView: View {
     return NavigationStack {
         HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
             .modelContainer(container)
+            .environment(lnManager)
             .preferredColorScheme(.dark)
             .tint(.red)
     }

@@ -105,11 +105,11 @@
 		C405D2592EB02DB000EFD82E = {
 			isa = PBXGroup;
 			children = (
-				C43175272EC3800A003F8AE9 /* ProgressWidget-ExtensionExtension.entitlements */,
 				C405D2642EB02DB000EFD82E /* Eighty Hard */,
 				C43175042EC37756003F8AE9 /* ProgressWidget-Extension */,
 				C43174FF2EC37756003F8AE9 /* Frameworks */,
 				C405D2632EB02DB000EFD82E /* Products */,
+				C43175272EC3800A003F8AE9 /* ProgressWidget-ExtensionExtension.entitlements */,
 			);
 			sourceTree = "<group>";
 		};
@@ -392,6 +392,7 @@
 				DEVELOPMENT_TEAM = UPDZ72Q2M2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Eighty-Hard-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -426,6 +427,7 @@
 				DEVELOPMENT_TEAM = UPDZ72Q2M2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Eighty-Hard-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

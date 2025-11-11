@@ -12,6 +12,7 @@ import WidgetKit
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(LocalNotificationManager.self) private var lnManager: LocalNotificationManager
     @Query private var challenges: [Challenge]
     
     @State private var path = NavigationPath()
@@ -20,6 +21,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             StartScreen(activeChallenge: $activeChallenge, path: $path)
+                .environment(lnManager)
                 .onAppear {
                     handleChallengeSync()
                 }
@@ -36,26 +38,29 @@ struct ContentView: View {
                     HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
                 }
                 .navigationDestination(for: Navigation.self) { navigation in
-                    switch navigation {
-                    case .previousResults:
-                        PreviousResultsView(path: $path)
-                    case .overview(let challenge):
-                        OverviewView(challenge: challenge, path: $path)
-                    case .tasks(let day, let dayNumber):
-                        if let day {
-                            TasksView(day: day)
-                        } else {
-                            NoDataView(dayNumber: dayNumber, path: $path)
+                    Group {
+                        switch navigation {
+                        case .previousResults:
+                            PreviousResultsView(path: $path)
+                        case .overview(let challenge):
+                            OverviewView(challenge: challenge, path: $path)
+                        case .tasks(let day, let dayNumber):
+                            if let day {
+                                TasksView(day: day)
+                            } else {
+                                NoDataView(dayNumber: dayNumber, path: $path)
+                            }
+                        case .alreadyStarted:
+                            AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
+                        case .alreadyStartedDataInput(let challenge):
+                            AlreadyStartedDataInputView(challenge: challenge, path: $path)
+                        case .moreInfo:
+                            MoreInfoView(path: $path)
+                        case .settingsPage(let challenge):
+                            SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
                         }
-                    case .alreadyStarted:
-                        AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
-                    case .alreadyStartedDataInput(let challenge):
-                        AlreadyStartedDataInputView(challenge: challenge, path: $path)
-                    case .moreInfo:
-                        MoreInfoView(path: $path)
-                    case .settingsPage(let challenge):
-                        SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
                     }
+                    .environment(lnManager)
                 }
         }
         .tint(.red)

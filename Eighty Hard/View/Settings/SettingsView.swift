@@ -10,8 +10,11 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(LocalNotificationManager.self) private var lnManager: LocalNotificationManager
     
     @AppStorage("carryOverCriticalTasks") private var carryOverCriticalTasks: Bool = false
+    @AppStorage("isUsingNotifications") private var isUsingNotifications: Bool = false
+    @AppStorage("notificationReminderTime") private var notificationReminderTime: Date = Date()
     
     @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
@@ -25,7 +28,38 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Form {
-                Section("Export Data") {
+                Section {
+                    Toggle("Tasks notifications", isOn: $isUsingNotifications.animation())
+                        .onChange(of: isUsingNotifications) { _, newValue in
+                            setNotifications()
+                        }
+                    if lnManager.isGranted && isUsingNotifications {
+                        DatePicker("Reminder time", selection: $notificationReminderTime, displayedComponents: .hourAndMinute)
+                            .onChange(of: notificationReminderTime) { _, newValue in
+                                let hours = Calendar.current.component(.hour, from: newValue)
+                                let minutes = Calendar.current.component(.minute, from: newValue)
+                                UserDefaults.standard.set(hours, forKey: "readingTimeHours")
+                                UserDefaults.standard.set(minutes, forKey: "readingTimeMinutes")
+                                setNotifications()
+                            }
+                    } else {
+                        if !lnManager.isGranted {
+                            VStack(alignment: .center) {
+                                Button("Enable Notifications") {
+                                    lnManager.openSettings()
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                } header: {
+                    Text("Daily Task Reminder")
+                } footer: {
+                    Text("Turn on reminders to get a daily notification to complete your tasks. You can adjust the reminder time or disable it anytime.")
+                }
+
+                Section {
                     Text("Export your data into CSV format.")
                     if let csvURL {
                         ShareLink(items: [csvURL]) {
@@ -36,6 +70,10 @@ struct SettingsView: View {
                             }
                         }
                     }
+                } header: {
+                    Text("Export Data")
+                } footer: {
+                    Text("Exports all nine daily tasks including both of your critical tasks for the entire challenge.")
                 }
                 
                 Section {
@@ -189,13 +227,38 @@ struct SettingsView: View {
         let escaped = field.replacingOccurrences(of: "\"", with: "\"\"")
         return escaped
     }
+    
+    func setNotifications() {
+        if isUsingNotifications {
+            Task {
+                lnManager.clearRequests()
+                var dateComponents = Calendar.current.dateComponents([.hour, .minute], from: notificationReminderTime)
+                for day in 0..<min(challenge.daysRemaining, 64) {
+                    dateComponents.weekday = day
+                    let uuid = "REMINDER_\(UUID().uuidString)"
+                    let localNotification = LocalNotification(
+                        identifier: uuid,
+                        title: "Daily Tasks Reminder",
+                        body: "Make sure to finalize your tasks for today!",
+                        dateComponents: dateComponents,
+                        repeats: true
+                    )
+                    await lnManager.schedule(localNotification: localNotification)
+                }
+            }
+        } else {
+            lnManager.clearRequests()
+        }
+    }
 }
 
 #Preview {
+    @Previewable @State var lnManager = LocalNotificationManager()
     @Previewable @State var challenge = Challenge()
     @Previewable @State var activeChallenge: Challenge? = Challenge()
     @Previewable @State var path = NavigationPath()
     
     SettingsView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
         .colorScheme(.dark)
+        .environment(lnManager)
 }
