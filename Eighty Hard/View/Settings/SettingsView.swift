@@ -82,7 +82,7 @@ struct SettingsView: View {
             Button("Quit Challenge", role: .destructive) {
                 challenge.status = .quit
                 activeChallenge = nil
-                path.removeLast(path.count)
+                path = NavigationPath()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
@@ -92,7 +92,7 @@ struct SettingsView: View {
             Button("Delete Challenge", role: .destructive) {
                 modelContext.delete(challenge)
                 activeChallenge = nil
-                path.removeLast(path.count)
+                path = NavigationPath()
             }
             Button("Cancel", role: .cancel) {}
         } message: {

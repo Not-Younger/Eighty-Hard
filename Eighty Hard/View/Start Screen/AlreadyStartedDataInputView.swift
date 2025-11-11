@@ -119,7 +119,7 @@ struct AlreadyStartedDataInputView: View {
                         Spacer()
                         Button {
                             modelContext.insert(challenge)
-                            path.removeLast(path.count)
+                            path = NavigationPath()
                             path.append(challenge)
                         } label: {
                             Text("Continue 80 Hard")

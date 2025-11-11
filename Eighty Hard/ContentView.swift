@@ -19,11 +19,12 @@ struct ContentView: View {
         NavigationStack(path: $path) {
             StartScreen(activeChallenge: $activeChallenge, path: $path)
                 .onAppear {
-                    if let currentChallenge = challenges.first(where: { $0.status == .inProgress }) {
-                        activeChallenge = currentChallenge
-                        path.append(currentChallenge)
-                    }
+                    handleChallengeSync()
                 }
+                .onChange(of: challenges) { _, _ in
+                    handleChallengeSync()
+                }
+
                 .preferredColorScheme(.dark)
                 .navigationDestination(for: Challenge.self) { challenge in
                     HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)
@@ -52,6 +53,24 @@ struct ContentView: View {
                 }
         }
         .tint(.red)
+    }
+    
+    private func handleChallengeSync() {
+        let inProgressChallenges = challenges
+            .filter { $0.status == .inProgress }
+            .sorted { $0.startDate < $1.startDate }
+
+        if let currentChallenge = inProgressChallenges.first {
+            activeChallenge = currentChallenge
+            path = NavigationPath()
+            path.append(currentChallenge)
+
+            if inProgressChallenges.count > 1 {
+                for i in 1..<inProgressChallenges.count {
+                    modelContext.delete(inProgressChallenges[i])
+                }
+            }
+        }
     }
 }
 

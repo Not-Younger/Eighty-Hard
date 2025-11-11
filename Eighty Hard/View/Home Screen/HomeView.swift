@@ -72,7 +72,7 @@ struct HomeView: View {
                 let day81 = challenge.days!.removeLast()
                 modelContext.delete(day81) // Delete day 81
                 activeChallenge = nil
-                path.removeLast(path.count)
+                path = NavigationPath()
                 print("Challenge number of days: \(challenge.days!.count)")
             }
         } message: {
