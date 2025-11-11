@@ -11,6 +11,8 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @AppStorage("carryOverCriticalTasks") private var carryOverCriticalTasks: Bool = false
+    
     @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
@@ -37,7 +39,7 @@ struct SettingsView: View {
                 }
                 
                 Section {
-                    Toggle("Carry over critical tasks", isOn: $challenge.carryOverCriticalTasks)
+                    Toggle("Carry over critical tasks", isOn: $carryOverCriticalTasks)
                 } header: {
                     Text("Preferences")
                 } footer: {

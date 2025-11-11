@@ -11,6 +11,8 @@ import SwiftUI
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     
+    @AppStorage("carryOverCriticalTasks") private var carryOverCriticalTasks: Bool = false
+    
     @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
@@ -86,7 +88,7 @@ struct HomeView: View {
                 let newDay = Day(number: currentDay.number + 1)
                 print("New Day: \(newDay.number)")
                 // Carry over critical tasks if selected
-                if challenge.carryOverCriticalTasks {
+                if carryOverCriticalTasks {
                     newDay.criticalTaskOne = currentDay.criticalTaskOne
                     newDay.criticalTaskTwo = currentDay.criticalTaskTwo
                 }

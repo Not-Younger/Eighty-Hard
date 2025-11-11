@@ -14,7 +14,6 @@ class Challenge: Identifiable {
     var startDate: Date = Date()
     var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 80)
     var statusRaw: String = ChallengeStatus.inProgress.rawValue
-    var carryOverCriticalTasks: Bool = false
 
     @Relationship(deleteRule: .cascade)
     var days: [Day]?
