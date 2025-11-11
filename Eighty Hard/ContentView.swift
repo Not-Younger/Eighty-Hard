@@ -7,9 +7,11 @@
 
 import SwiftData
 import SwiftUI
+import WidgetKit
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @Query private var challenges: [Challenge]
     
     @State private var path = NavigationPath()
@@ -24,7 +26,11 @@ struct ContentView: View {
                 .onChange(of: challenges) { _, _ in
                     handleChallengeSync()
                 }
-
+                .onChange(of: scenePhase) { _, newValue in
+                    if newValue == .inactive {
+                        WidgetCenter.shared.reloadTimelines(ofKind: "Progress_Widget")
+                    }
+                }
                 .preferredColorScheme(.dark)
                 .navigationDestination(for: Challenge.self) { challenge in
                     HomeView(challenge: challenge, activeChallenge: $activeChallenge, path: $path)

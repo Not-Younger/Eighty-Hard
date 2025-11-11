@@ -10,10 +10,12 @@ import SwiftUI
 
 @main
 struct Eighty_HardApp: App {
+    let container: ModelContainer = DataModel.shared.modelContainer
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Challenge.self)
+        .modelContainer(container)
     }
 }

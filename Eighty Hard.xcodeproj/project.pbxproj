@@ -6,14 +6,78 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C43175012EC37756003F8AE9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C43175002EC37756003F8AE9 /* WidgetKit.framework */; };
+		C43175032EC37756003F8AE9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C43175022EC37756003F8AE9 /* SwiftUI.framework */; };
+		C431750E2EC37757003F8AE9 /* ProgressWidget-ExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C43174FE2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C431750C2EC37757003F8AE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C405D25A2EB02DB000EFD82E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C43174FD2EC37756003F8AE9;
+			remoteInfo = "ProgressWidget-ExtensionExtension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C43175132EC37757003F8AE9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C431750E2EC37757003F8AE9 /* ProgressWidget-ExtensionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		C405D2622EB02DB000EFD82E /* Eighty Hard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Eighty Hard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C43174FE2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProgressWidget-ExtensionExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C43175002EC37756003F8AE9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		C43175022EC37756003F8AE9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		C43175272EC3800A003F8AE9 /* ProgressWidget-ExtensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ProgressWidget-ExtensionExtension.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C431750F2EC37757003F8AE9 /* Exceptions for "ProgressWidget-Extension" folder in "ProgressWidget-ExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C43174FD2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension */;
+		};
+		C431751C2EC37956003F8AE9 /* Exceptions for "Eighty Hard" folder in "ProgressWidget-ExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/Challenge.swift,
+				Model/DataModel.swift,
+				Model/Day.swift,
+			);
+			target = C43174FD2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C405D2642EB02DB000EFD82E /* Eighty Hard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C431751C2EC37956003F8AE9 /* Exceptions for "Eighty Hard" folder in "ProgressWidget-ExtensionExtension" target */,
+			);
 			path = "Eighty Hard";
+			sourceTree = "<group>";
+		};
+		C43175042EC37756003F8AE9 /* ProgressWidget-Extension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C431750F2EC37757003F8AE9 /* Exceptions for "ProgressWidget-Extension" folder in "ProgressWidget-ExtensionExtension" target */,
+			);
+			path = "ProgressWidget-Extension";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,13 +90,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C43174FB2EC37756003F8AE9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C43175032EC37756003F8AE9 /* SwiftUI.framework in Frameworks */,
+				C43175012EC37756003F8AE9 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		C405D2592EB02DB000EFD82E = {
 			isa = PBXGroup;
 			children = (
+				C43175272EC3800A003F8AE9 /* ProgressWidget-ExtensionExtension.entitlements */,
 				C405D2642EB02DB000EFD82E /* Eighty Hard */,
+				C43175042EC37756003F8AE9 /* ProgressWidget-Extension */,
+				C43174FF2EC37756003F8AE9 /* Frameworks */,
 				C405D2632EB02DB000EFD82E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,8 +117,18 @@
 			isa = PBXGroup;
 			children = (
 				C405D2622EB02DB000EFD82E /* Eighty Hard.app */,
+				C43174FE2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C43174FF2EC37756003F8AE9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C43175002EC37756003F8AE9 /* WidgetKit.framework */,
+				C43175022EC37756003F8AE9 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,10 +141,12 @@
 				C405D25E2EB02DB000EFD82E /* Sources */,
 				C405D25F2EB02DB000EFD82E /* Frameworks */,
 				C405D2602EB02DB000EFD82E /* Resources */,
+				C43175132EC37757003F8AE9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C431750D2EC37757003F8AE9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C405D2642EB02DB000EFD82E /* Eighty Hard */,
@@ -69,6 +157,28 @@
 			productName = "Eighty-Hard";
 			productReference = C405D2622EB02DB000EFD82E /* Eighty Hard.app */;
 			productType = "com.apple.product-type.application";
+		};
+		C43174FD2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C43175102EC37757003F8AE9 /* Build configuration list for PBXNativeTarget "ProgressWidget-ExtensionExtension" */;
+			buildPhases = (
+				C43174FA2EC37756003F8AE9 /* Sources */,
+				C43174FB2EC37756003F8AE9 /* Frameworks */,
+				C43174FC2EC37756003F8AE9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C43175042EC37756003F8AE9 /* ProgressWidget-Extension */,
+			);
+			name = "ProgressWidget-ExtensionExtension";
+			packageProductDependencies = (
+			);
+			productName = "ProgressWidget-ExtensionExtension";
+			productReference = C43174FE2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +191,9 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					C405D2612EB02DB000EFD82E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					C43174FD2EC37756003F8AE9 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
@@ -100,12 +213,20 @@
 			projectRoot = "";
 			targets = (
 				C405D2612EB02DB000EFD82E /* Eighty Hard */,
+				C43174FD2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C405D2602EB02DB000EFD82E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C43174FC2EC37756003F8AE9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +243,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C43174FA2EC37756003F8AE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C431750D2EC37757003F8AE9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C43174FD2EC37756003F8AE9 /* ProgressWidget-ExtensionExtension */;
+			targetProxy = C431750C2EC37757003F8AE9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C405D26E2EB02DB100EFD82E /* Debug */ = {
@@ -312,6 +448,62 @@
 			};
 			name = Release;
 		};
+		C43175112EC37757003F8AE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "ProgressWidget-ExtensionExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UPDZ72Q2M2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ProgressWidget-Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ProgressWidget-Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jonathanyoung.Eighty-Hard.ProgressWidget-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C43175122EC37757003F8AE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "ProgressWidget-ExtensionExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UPDZ72Q2M2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ProgressWidget-Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ProgressWidget-Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jonathanyoung.Eighty-Hard.ProgressWidget-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -329,6 +521,15 @@
 			buildConfigurations = (
 				C405D2712EB02DB100EFD82E /* Debug */,
 				C405D2722EB02DB100EFD82E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C43175102EC37757003F8AE9 /* Build configuration list for PBXNativeTarget "ProgressWidget-ExtensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C43175112EC37757003F8AE9 /* Debug */,
+				C43175122EC37757003F8AE9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
