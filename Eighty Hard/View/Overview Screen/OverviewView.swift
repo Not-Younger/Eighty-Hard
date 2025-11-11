@@ -51,8 +51,12 @@ struct OverviewView: View {
                             )
                             .frame(width: 180, height: 180)
                         
-                        Text(daysCompletionFraction >= 1.0 ? "Last Day!" : "\(Int(daysCompletionFraction * 100))%")
-                            .font(.system(size: 32, weight: .bold))
+                        VStack(alignment: .center) {
+                            Text("Day")
+                                .font(.system(size: 18, weight: .medium))
+                            Text("\(challenge.currentDay?.number ?? 0) / 80")
+                                .font(.system(size: 32, weight: .bold))
+                        }
                     }
                     .padding(.vertical, 40)
                     

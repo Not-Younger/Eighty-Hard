@@ -24,9 +24,9 @@ struct ChallengeGradeView: View {
         switch completionFraction {
         case 1.0: return "S"
         case 0.9..<1.0: return "A"
-        case 0.75..<0.9: return "B"
-        case 0.6..<0.75: return "C"
-        case 0.4..<0.6: return "D"
+        case 0.8..<0.9: return "B"
+        case 0.7..<0.8: return "C"
+        case 0.6..<0.7: return "D"
         case 0: return "F-"
         default: return "F"
         }
@@ -36,9 +36,9 @@ struct ChallengeGradeView: View {
         guard let grade = grade else { return .red }
         switch grade {
         case "S": return .purple
-        case "A": return .green
-        case "B": return .yellow
-        case "C": return .orange
+        case "A": return .green.opacity(0.7)
+        case "B": return .yellow.opacity(0.9)
+        case "C": return .orange.opacity(0.9)
         case "D": return .red.opacity(0.7)
         case "F": return .red
         default: return .red.opacity(0.5)
@@ -55,7 +55,7 @@ struct ChallengeGradeView: View {
         
         // Adaptive grading text
         switch grade {
-        case "S": return "You're on fire! You've completed \(percentage)% of your tasks. Keep up the incredible work!"
+        case "S": return "You're on fire! You've completed 100% of your tasks. Keep up the incredible work!"
         case "A": return "Amazing! You’ve completed \(percentage)% of your tasks. Keep up the great work!"
         case "B": return "Great job! You’re at \(percentage)% of your tasks. Stay consistent and push a little further!"
         case "C": return "Not bad! \(percentage)% of your tasks completed. You can reach the next level with some extra effort."
@@ -76,10 +76,10 @@ struct ChallengeGradeView: View {
                 if let grade = grade {
                     if grade == "F-" {
                         Text("😢")
-                            .font(.headline)
+                            .font(.system(size: 28))
                     } else {
                         Text(grade)
-                            .font(.headline)
+                            .font(.system(size: 28, weight: .medium))
                             .foregroundColor(.white)
                     }
                 } else {
