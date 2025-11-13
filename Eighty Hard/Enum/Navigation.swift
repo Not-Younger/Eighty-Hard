@@ -10,7 +10,8 @@ import Foundation
 enum Navigation: Hashable {
     case previousResults
     case overview(challenge: Challenge)
-    case tasks(day: Day?, dayNumber: Int)
+    case tasks(day: Day)
+    case noData(day: Day)
     case alreadyStarted
     case alreadyStartedDataInput(challenge: Challenge)
     case moreInfo

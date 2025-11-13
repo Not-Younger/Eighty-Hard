@@ -25,32 +25,29 @@ struct TasksView: View {
         ]
     }
     
-    // Computed color based on completion percentage
-    private var progressColor: Color {
-        let fraction = Double(day.completedTasks) / Double(9)
-        switch fraction {
-        case 1: return .red
-        default:
-            return .orange
-        }
-    }
-    
     var body: some View {
+        let tasksCompleted = day.tasksCompleted
         VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Day \(day.number)")
-                    .font(.title)
-                    .bold()
-                    .padding(.bottom)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Day \(day.number)")
+                        .font(.title)
+                        .bold()
+                    
+                    Text(day.date.formatted(date: .abbreviated, time: .omitted))
+                        .foregroundStyle(.secondary)
+                        .font(.subheadline)
+                }
+                .padding(.bottom, 8)
                 
-                Text(day.completedTasks == 9 ? "🎉 All tasks completed!" : "\(day.completedTasks) of 9 tasks completed")
+                Text(tasksCompleted == 9 ? "🎉 All tasks completed!" : "\(tasksCompleted) of 9 tasks completed")
                     .font(.headline)
-                    .foregroundColor(day.completedTasks == 9 ? .primary : .secondary)
-                    .animation(.easeInOut(duration: 0.3), value: day.completedTasks)
+                    .foregroundColor(tasksCompleted == 9 ? .primary : .secondary)
+                    .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
                 
-                ProgressView(value: Double(day.completedTasks), total: Double(9))
-                    .accentColor(progressColor)
-                    .animation(.easeInOut(duration: 0.3), value: day.completedTasks)
+                ProgressView(value: Double(tasksCompleted), total: Double(9))
+                    .tint(.red)
+                    .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
             }
             .padding(.bottom)
             
@@ -69,7 +66,7 @@ struct TasksView: View {
                                 impact.impactOccurred()
                                 
                                 // Celebration haptic if all tasks completed
-                                if day.completedTasks == 9 {
+                                if tasksCompleted == 9 {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                 }
@@ -77,15 +74,16 @@ struct TasksView: View {
                         ))
                     }
                     HStack {
-                        Image(systemName: day.didCriticalTasks ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(day.didCriticalTasks ? .red : .gray)
+                        let didCriticalTasks = day.didCriticalTasks
+                        Image(systemName: didCriticalTasks ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(didCriticalTasks ? .red : .gray)
                             .font(.title)
                             .onTapGesture {
                                 withAnimation {
                                     if day.criticalTaskOne.isEmpty || day.criticalTaskTwo.isEmpty {
                                         isShowingCriticalTaskAlert.toggle()
                                     } else if !day.criticalTaskOne.isEmpty && !day.criticalTaskTwo.isEmpty {
-                                        let newValue = !day.didCriticalTasks
+                                        let newValue = !didCriticalTasks
                                         day.didCriticalTaskOne = newValue
                                         day.didCriticalTaskTwo = newValue
                                     }
@@ -158,7 +156,7 @@ struct TasksView: View {
 }
 
 #Preview {
-    let day = Day(number: 1)
+    let day = Day(number: 1, date: Date())
     return NavigationStack {
         TasksView(day: day)
     }

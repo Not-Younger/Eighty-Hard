@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WidgetOverviewView: View {
     let days: [Day]
-    let totalDots = 80
     
     var body: some View {
         GeometryReader { geometry in
@@ -21,7 +20,7 @@ struct WidgetOverviewView: View {
             
             // Compute best column count using functional style
             let gridOptions = (4...16).map { cols -> (cols: Int, itemSize: CGFloat) in
-                let rows = ceil(Double(totalDots) / Double(cols))
+                let rows = ceil(Double(days.count) / Double(cols))
                 let totalHSpacing = CGFloat(cols - 1) * spacing
                 let totalVSpacing = CGFloat(rows - 1) * spacing
                 let availableWidth = maxWidth - totalHSpacing - (padding * 2)
@@ -41,12 +40,9 @@ struct WidgetOverviewView: View {
             )
             
             LazyVGrid(columns: columns, spacing: spacing) {
-                ForEach(0..<totalDots, id: \.self) { index in
-                    let dayNumber = index + 1
-                    let day = days.first(where: { $0.number == dayNumber })
-                    
+                ForEach(days) { day in
                     RoundedRectangle(cornerRadius: 3)
-                        .fill(day?.completionColor ?? Color.gray.opacity(0.3))
+                        .fill(day.completionColor)
                         .frame(width: best.itemSize, height: best.itemSize)
                 }
             }

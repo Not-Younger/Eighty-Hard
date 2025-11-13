@@ -14,17 +14,10 @@ struct AlreadyStartedDataInputView: View {
     @Bindable var challenge: Challenge
     @Binding var path: NavigationPath
     
-    let totalDots = 80
     let columns = 7
     
-    // Progress based on completed days
-    private var daysCompletionFraction: Double {
-        let completedDays = Double((challenge.days ?? []).count)
-        return completedDays / Double(totalDots)
-    }
-    
     var body: some View {
-        let days = (challenge.days ?? []).sorted { $0.number < $1.number }
+        let days = (challenge.days ?? []).sorted { $0.date < $1.date }
         
         GeometryReader { geometry in
             let totalSpacing: CGFloat = CGFloat(columns - 1) * 8 // 8pt spacing between items
@@ -39,12 +32,12 @@ struct AlreadyStartedDataInputView: View {
                             .frame(width: 180, height: 180)
                         
                         Circle()
-                            .trim(from: 0, to: daysCompletionFraction)
+                            .trim(from: 0, to: challenge.daysCompletedFraction)
                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                             .rotationEffect(.degrees(-90))
                             .foregroundStyle(
                                 LinearGradient(
-                                    colors: daysCompletionFraction >= 1.0
+                                    colors: challenge.daysCompletedFraction >= 1.0
                                         ? [.green]
                                         : [.red, .orange],
                                     startPoint: .topLeading,
@@ -53,8 +46,12 @@ struct AlreadyStartedDataInputView: View {
                             )
                             .frame(width: 180, height: 180)
                         
-                        Text(daysCompletionFraction >= 1.0 ? "Complete!" : "\(Int(daysCompletionFraction * 100))%")
-                            .font(.system(size: 32, weight: .bold))
+                        VStack(alignment: .center) {
+                            Text("Day")
+                                .font(.system(size: 18, weight: .medium))
+                            Text("\(challenge.currentDay?.number ?? 80) / 80")
+                                .font(.system(size: 32, weight: .bold))
+                        }
                     }
                     .padding(.vertical, 40)
                     
@@ -88,19 +85,16 @@ struct AlreadyStartedDataInputView: View {
                     
                     // Grid of days
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns), spacing: 8) {
-                        ForEach(0..<totalDots, id: \.self) { index in
-                            let dayNumber = index + 1
-                            let day = days.first(where: { $0.number == dayNumber })
-                            
+                        ForEach(days) { day in
                             Button {
-                                path.append(Navigation.tasks(day: day, dayNumber: dayNumber))
+                                path.append(Navigation.tasks(day: day))
                             } label: {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(day?.completionColor ?? Color.gray.opacity(0.3))
+                                        .fill(day.completionColor)
                                         .frame(width: abs(itemSize), height: abs(itemSize))
                                     
-                                    Text("\(dayNumber)")
+                                    Text("\(day.number)")
                                         .font(.system(size: itemSize * 0.3, weight: .bold))
                                         .foregroundColor(.white)
                                 }
@@ -151,19 +145,17 @@ struct AlreadyStartedDataInputView: View {
     let challenge = Challenge()
     challenge.status = .completed
     
-    for i in 0...1 {
-        let newDay = Day(number: i)
-        newDay.didDrinkWater = true
-        newDay.didWorkout = true
-        newDay.didReading = true
-        newDay.didColdShower = true
-        newDay.didDiet = true
-        newDay.didCriticalTaskOne = true
-        newDay.didCriticalTaskTwo = true
-        newDay.didSocialMediaLimit = true
-        newDay.didStayUnderDrinkLimit = true
-        newDay.didMeditate = true
-        challenge.days?.append(newDay)
+    for day in challenge.days ?? [] {
+        day.didDrinkWater = true
+        day.didWorkout = true
+        day.didReading = true
+        day.didColdShower = true
+        day.didDiet = true
+        day.didCriticalTaskOne = true
+        day.didCriticalTaskTwo = true
+        day.didSocialMediaLimit = true
+        day.didStayUnderDrinkLimit = true
+        day.didMeditate = true
     }
     
     container.mainContext.insert(challenge)

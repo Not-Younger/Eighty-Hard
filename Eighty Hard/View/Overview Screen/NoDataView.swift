@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct NoDataView: View {
-    let dayNumber: Int
+    let day: Day
     @Binding var path: NavigationPath
     
     var body: some View {
@@ -20,15 +21,17 @@ struct NoDataView: View {
                 .foregroundStyle(.gray.opacity(0.7))
                 .padding(.top, 80)
             
-            Text("No Data for Day \(dayNumber)")
+            Text("No Data for Day \(day.number)")
                 .font(.title3.bold())
                 .foregroundStyle(.white.opacity(0.9))
             
-            Text("This date is in the future and can't tracked yet.")
-                .font(.subheadline)
-                .foregroundStyle(.gray)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            Group {
+                Text("This date is in the future or the challenge was quit before it happened and can't be tracked yet.")
+            }
+            .font(.subheadline)
+            .foregroundStyle(.gray)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
             
             Button {
                 path.removeLast()
@@ -49,6 +52,16 @@ struct NoDataView: View {
 
 #Preview {
     @Previewable @State var path = NavigationPath()
+    @Previewable @State var challenge = Challenge()
+    let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
+
+    container.mainContext.insert(challenge)
     
-    return NoDataView(dayNumber: 1, path: $path)
+    return NavigationStack {
+        NoDataView(day: challenge.days?.first ?? Day(number: 1, date: Date()), path: $path)
+            .modelContainer(container)
+            .preferredColorScheme(.dark)
+            .tint(.red)
+    }
 }

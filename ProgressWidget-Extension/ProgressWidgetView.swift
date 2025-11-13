@@ -33,12 +33,9 @@ struct ProgressWidgetView: View {
     }
     
     func getRandomChallenge() -> Challenge {
-        let challenge = Challenge()
-        var generatedDays: [Day] = []
+        let challenge = Challenge(startDate: Date.distantPast)
         
-        for i in 1...75 {
-            let day = Day(number: i)
-            
+        for day in challenge.days ?? [] {
             // Randomize task completion
             day.didDrinkWater = Bool.random()
             day.didWorkout = Bool.random()
@@ -53,12 +50,7 @@ struct ProgressWidgetView: View {
             }
             day.didMeditate = Bool.random()
             day.didSocialMediaLimit = Bool.random()
-            
-            generatedDays.append(day)
         }
-        
-        challenge.days = generatedDays
-        challenge.status = .inProgress
         
         return challenge
     }

@@ -28,8 +28,9 @@ class Day: Identifiable {
     var criticalTaskOne: String = ""
     var criticalTaskTwo: String = ""
     
-    init(number: Int) {
+    init(number: Int, date: Date) {
         self.number = number
+        self.date = date
     }
     
     @Relationship(inverse: \Challenge.days)
@@ -71,7 +72,7 @@ extension Day {
         didCriticalTaskOne && didCriticalTaskTwo
     }
     
-    var completedTasks: Int {
+    var tasksCompleted: Int {
         var count: Int = 0
         if didDrinkWater { count += 1 }
         if didWorkout { count += 1 }
@@ -86,6 +87,12 @@ extension Day {
     }
     
     var completionColor: Color {
+        // If day hasn't happened return gray
+        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: Date())) else { return Color.gray.opacity(0.3) }
+        
+        // If day was after the challenges end date return gray
+        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: challenge?.endDate ?? Date())) else { return Color.gray.opacity(0.3) }
+        
         let tasks = [
             self.didDrinkWater,
             self.didWorkout,
@@ -101,13 +108,23 @@ extension Day {
         let fraction = Double(tasks.filter { $0 }.count) / Double(tasks.count)
         
         switch fraction {
-        case 0.0..<0.2: return Color.red.opacity(0.3)
-        case 0.2..<0.4: return Color.red.opacity(0.4)
-        case 0.4..<0.6: return Color.red.opacity(0.5)
-        case 0.6..<0.8: return Color.red.opacity(0.6)
-        case 0.8..<0.99: return Color.red.opacity(0.7)
-        default:        return Color.red.opacity(0.8)
+            case 0.0..<0.2: return Color.red.opacity(0.3)
+            case 0.2..<0.4: return Color.red.opacity(0.4)
+            case 0.4..<0.6: return Color.red.opacity(0.5)
+            case 0.6..<0.8: return Color.red.opacity(0.6)
+            case 0.8..<0.99: return Color.red.opacity(0.7)
+            default:        return Color.red.opacity(0.8)
         }
+    }
+    
+    var isAccessible: Bool {
+        // If day hasn't happened return false
+        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: Date())) else { return false }
+        
+        // If day was after the challenges end date return false
+        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: challenge?.endDate ?? Date())) else { return false }
+        
+        return true
     }
 }
 

@@ -21,13 +21,14 @@ struct HomeView: View {
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
     
+    @State private var currentDay: Day? = nil
     @State private var isShowingFinishedAlert = false
     
     var body: some View {
         VStack {
             if let currentDay = challenge.currentDay {
                 ZStack {
-                    if currentDay.completedTasks == 9 {
+                    if currentDay.tasksCompleted == 9 {
                         LinearGradient(colors: [.black, .red], startPoint: .top, endPoint: .bottom)
                             .ignoresSafeArea()
                     }
@@ -67,17 +68,25 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            updateCurrentDay()
+            if let challengeCurrentDay = challenge.currentDay {
+                currentDay = challengeCurrentDay
+                
+                // Carry over previous critical tasks if toggled
+                if let challengePreviousDay = challenge.previousDay, carryOverCriticalTasks, challengeCurrentDay.criticalTaskOne.isEmpty, challengeCurrentDay.criticalTaskTwo.isEmpty {
+                    challengeCurrentDay.criticalTaskOne = challengePreviousDay.criticalTaskOne
+                    challengeCurrentDay.criticalTaskTwo = challengePreviousDay.criticalTaskTwo
+                }
+            } else {
+                isShowingFinishedAlert = true
+            }
         }
         .alert("Congratulations!", isPresented: $isShowingFinishedAlert) {
             Button("Complete") {
-                challenge.status = .completed
-                print("Challenge number of days: \(challenge.days!.count)")
-                let day81 = challenge.days!.removeLast()
-                modelContext.delete(day81) // Delete day 81
-                activeChallenge = nil
-                path = NavigationPath()
-                print("Challenge number of days: \(challenge.days!.count)")
+                if challenge.finishChallenge() {
+                    activeChallenge = nil
+                    path = NavigationPath()
+                    print("Challenge number of days: \(challenge.days!.count)")
+                }
             }
         } message: {
             Text("You’ve completed all 80 days. That’s insane discipline. Well done. You can view this challenge in your previous challenges list.")
@@ -89,31 +98,6 @@ struct HomeView: View {
                     setNotifications()
                 }
             }
-        }
-    }
-    
-    private func updateCurrentDay() {
-        if let currentDay = challenge.currentDay {
-            if currentDay.number > 80 {
-                isShowingFinishedAlert = true
-            } else if !Calendar.current.isDateInToday(currentDay.date) {
-                let newDay = Day(number: currentDay.number + 1)
-                print("New Day: \(newDay.number)")
-                // Carry over critical tasks if selected
-                if carryOverCriticalTasks {
-                    newDay.criticalTaskOne = currentDay.criticalTaskOne
-                    newDay.criticalTaskTwo = currentDay.criticalTaskTwo
-                }
-                newDay.challenge = challenge
-                modelContext.insert(newDay)
-                challenge.days?.append(newDay)
-            }
-        } else {
-            // Day 1
-            let newDay = Day(number: 1)
-            newDay.challenge = challenge
-            modelContext.insert(newDay)
-            challenge.days?.append(newDay)
         }
     }
     

@@ -157,9 +157,10 @@ struct SettingsView: View {
         }
         .alert("Are you sure?", isPresented: $isShowingEndChallengeAlert) {
             Button("Quit Challenge", role: .destructive) {
-                challenge.status = .quit
-                activeChallenge = nil
-                path = NavigationPath()
+                if challenge.quitChallenge() {
+                    activeChallenge = nil
+                    path = NavigationPath()
+                }
             }
             Button("Cancel", role: .cancel) {}
         } message: {

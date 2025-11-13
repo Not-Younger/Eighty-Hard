@@ -12,7 +12,7 @@ struct PreviousResultsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<Challenge> { challenge in
         challenge.statusRaw != "In Progress"
-    }) var challenges: [Challenge]
+    }, sort: \.startDate, order: .reverse) var challenges: [Challenge]
     
     @Binding var path: NavigationPath
     
@@ -47,15 +47,15 @@ struct PreviousResultsView: View {
                                         Text("Challenge \(challenge.id.prefix(8))")
                                             .font(.headline)
                                         
-                                        Text("\(challenge.startDate.formatted(date: .abbreviated, time: .omitted)) → \(challenge.endDate.formatted(date: .abbreviated, time: .omitted))")
+                                        Text("\(challenge.startDate.formatted(date: .abbreviated, time: .omitted)) → \(challenge.endDate.formatted(date: .abbreviated, time: .omitted)) (^[\(challenge.daysCompleted) days](inflect: true))")
                                             .font(.subheadline)
                                             .foregroundStyle(.secondary)
                                         
                                         HStack {
-                                            ProgressView(value: challenge.completionPercentage)
+                                            ProgressView(value: challenge.completionFractionAllTasks)
                                                 .tint(.green)
                                                 .frame(maxWidth: 120)
-                                            Text(challenge.completedTasks.description + " / " + challenge.totalTasks.description)
+                                            Text("\(challenge.completedTasks) / \(9 * 80)")
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }
@@ -102,19 +102,17 @@ struct PreviousResultsView: View {
     
     for _ in 0..<1 {
         let challenge = Challenge()
-        for i in 0..<80 {
-            let newDay = Day(number: i)
-            challenge.days?.append(newDay)
-            newDay.didDrinkWater = true
-            newDay.didWorkout = true
-            newDay.didReading = true
-            newDay.didColdShower = true
-            newDay.didDiet = true
-            newDay.didCriticalTaskOne = true
-            newDay.didCriticalTaskTwo = true
-            newDay.didSocialMediaLimit = true
-            newDay.didStayUnderDrinkLimit = true
-            newDay.didMeditate = true
+        for day in challenge.days ?? [] {
+            day.didDrinkWater = true
+            day.didWorkout = true
+            day.didReading = true
+            day.didColdShower = true
+            day.didDiet = true
+            day.didCriticalTaskOne = true
+            day.didCriticalTaskTwo = true
+            day.didSocialMediaLimit = true
+            day.didStayUnderDrinkLimit = true
+            day.didMeditate = true
         }
         challenge.status = .completed
         container.mainContext.insert(challenge)

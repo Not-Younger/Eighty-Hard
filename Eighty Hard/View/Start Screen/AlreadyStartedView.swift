@@ -46,18 +46,7 @@ struct AlreadyStartedView: View {
                 HStack {
                     Spacer()
                     Button {
-                        let newChallenge = Challenge()
-                        newChallenge.startDate = startDate
-    
-                        // Calculate number of days between startDate and today (inclusive)
-                        let totalDays = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day ?? 0
-                        let completedDays = max(0, min(totalDays + 1, 81)) // Clamp between 0–80
-    
-                        for i in 0...completedDays {
-                            let newDay = Day(number: i)
-                            newChallenge.days?.append(newDay)
-                        }
-    
+                        let newChallenge = Challenge(startDate: startDate)
                         activeChallenge = newChallenge
                         path.append(Navigation.alreadyStartedDataInput(challenge: newChallenge))
                     } label: {

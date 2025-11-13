@@ -108,6 +108,8 @@ struct StartScreen: View {
                 
                 Button {
                     let newChallenge = Challenge()
+                    modelContext.insert(newChallenge)
+                    try? modelContext.save()
                     activeChallenge = newChallenge
                     path.append(newChallenge)
                 } label: {

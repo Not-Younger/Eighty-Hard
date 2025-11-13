@@ -44,12 +44,10 @@ struct ContentView: View {
                             PreviousResultsView(path: $path)
                         case .overview(let challenge):
                             OverviewView(challenge: challenge, path: $path)
-                        case .tasks(let day, let dayNumber):
-                            if let day {
-                                TasksView(day: day)
-                            } else {
-                                NoDataView(dayNumber: dayNumber, path: $path)
-                            }
+                        case .tasks(let day):
+                            TasksView(day: day)
+                        case .noData(let day):
+                            NoDataView(day: day, path: $path)
                         case .alreadyStarted:
                             AlreadyStartedView(activeChallenge: $activeChallenge, path: $path)
                         case .alreadyStartedDataInput(let challenge):
@@ -90,8 +88,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    let challengeConfig = ModelConfiguration(for: Challenge.self, isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: Challenge.self, configurations: challengeConfig)
+    let container: ModelContainer = DataModel.shared.modelContainer
+    let lnManager = LocalNotificationManager()
     
     let challenge = Challenge()
     challenge.status = .completed
@@ -99,4 +97,5 @@ struct ContentView: View {
     
     return ContentView()
         .modelContainer(container)
+        .environment(lnManager)
 }
