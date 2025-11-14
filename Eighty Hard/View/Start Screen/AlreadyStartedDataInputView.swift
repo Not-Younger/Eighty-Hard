@@ -83,25 +83,7 @@ struct AlreadyStartedDataInputView: View {
                     .cornerRadius(12)
                         .padding(.horizontal)
                     
-                    // Grid of days
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns), spacing: 8) {
-                        ForEach(days) { day in
-                            Button {
-                                path.append(Navigation.tasks(day: day))
-                            } label: {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(day.completionColor)
-                                        .frame(width: abs(itemSize), height: abs(itemSize))
-                                    
-                                    Text("\(day.number)")
-                                        .font(.system(size: itemSize * 0.3, weight: .bold))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
+                    DaysGridView(days: days, columns: columns, totalSpacing: totalSpacing, availableWidth: availableWidth, itemSize: itemSize, path: $path)
                 }
                 .padding(.bottom, 140)
             }

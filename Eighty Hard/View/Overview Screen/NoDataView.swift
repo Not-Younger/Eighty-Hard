@@ -47,6 +47,8 @@ struct NoDataView: View {
             .padding(.top, 10)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle(day.date.formatted(.dateTime.month().day().year()))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

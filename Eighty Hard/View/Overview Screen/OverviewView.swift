@@ -59,29 +59,7 @@ struct OverviewView: View {
                     ChallengeGradeView(challenge: challenge)
                         .padding(.horizontal)
                     
-                    // Grid of days
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns), spacing: 8) {
-                        ForEach(days) { day in
-                            Button {
-                                if day.isAccessible {
-                                    path.append(Navigation.tasks(day: day))
-                                } else {
-                                    path.append(Navigation.noData(day: day))
-                                }
-                            } label: {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(day.completionColor)
-                                        .frame(width: abs(itemSize), height: abs(itemSize))
-                                    
-                                    Text("\(day.number)")
-                                        .font(.system(size: itemSize * 0.3, weight: .bold))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
+                    DaysGridView(days: days, columns: columns, totalSpacing: totalSpacing, availableWidth: availableWidth, itemSize: itemSize, path: $path)
                 }
                 .padding(.bottom, 40)
             }
