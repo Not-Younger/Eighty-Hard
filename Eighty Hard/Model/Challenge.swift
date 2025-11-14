@@ -46,16 +46,6 @@ class Challenge: Identifiable {
 extension Challenge {
     public static var daysBeforeGrade: Int = 3
     
-    var previousDay: Day? {
-        for day in days ?? [] {
-            if Calendar.current.isDateInYesterday(day.date) {
-                return day
-            }
-        }
-        print("Previous day not found")
-        return nil
-    }
-    
     var currentDay: Day? {
         for day in days ?? [] {
             if Calendar.current.isDateInToday(day.date) {
@@ -66,18 +56,8 @@ extension Challenge {
         return nil
     }
     
-    var nextDay: Day? {
-        for day in days ?? [] {
-            if Calendar.current.isDateInTomorrow(day.date) {
-                return day
-            }
-        }
-        print("Next day not found")
-        return nil
-    }
-    
     func quitChallenge() -> Bool {
-        if Calendar.current.startOfDay(for: Date()) < Calendar.current.startOfDay(for: endDate) {
+        if Calendar.current.startOfDay(for: Date()) <= Calendar.current.startOfDay(for: endDate) {
             endDate = Date()
             status = .quit
             print("Challenge quit...")

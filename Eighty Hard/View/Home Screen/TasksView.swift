@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TasksView: View {
+    @AppStorage("criticalTaskOne") private var criticalTaskOne: String = ""
+    @AppStorage("criticalTaskTwo") private var criticalTaskTwo: String = ""
+    
     @Bindable var day: Day
     
     @State private var isShowingCriticalTaskAlert: Bool = false
@@ -107,6 +110,7 @@ struct TasksView: View {
                                 }
                             TextField("Task One", text: $day.criticalTaskOne)
                                 .onChange(of: day.criticalTaskOne) { _, newValue in
+                                    criticalTaskOne = newValue
                                     withAnimation {
                                         if newValue.isEmpty {
                                             day.didCriticalTaskOne = false
@@ -129,6 +133,7 @@ struct TasksView: View {
                                 }
                             TextField("Task Two", text: $day.criticalTaskTwo)
                                 .onChange(of: day.criticalTaskTwo) { _, newValue in
+                                    criticalTaskTwo = newValue
                                     withAnimation {
                                         if newValue.isEmpty {
                                             day.didCriticalTaskTwo = false

@@ -16,6 +16,8 @@ struct HomeView: View {
     @AppStorage("carryOverCriticalTasks") private var carryOverCriticalTasks: Bool = false
     @AppStorage("isUsingNotifications") private var isUsingNotifications: Bool = false
     @AppStorage("notificationReminderTime") private var notificationReminderTime: Date = Date()
+    @AppStorage("criticalTaskOne") private var criticalTaskOne: String = ""
+    @AppStorage("criticalTaskTwo") private var criticalTaskTwo: String = ""
     
     @Bindable var challenge: Challenge
     @Binding var activeChallenge: Challenge?
@@ -70,11 +72,10 @@ struct HomeView: View {
         .onAppear {
             if let challengeCurrentDay = challenge.currentDay {
                 currentDay = challengeCurrentDay
-                
                 // Carry over previous critical tasks if toggled
-                if let challengePreviousDay = challenge.previousDay, carryOverCriticalTasks, challengeCurrentDay.criticalTaskOne.isEmpty, challengeCurrentDay.criticalTaskTwo.isEmpty {
-                    challengeCurrentDay.criticalTaskOne = challengePreviousDay.criticalTaskOne
-                    challengeCurrentDay.criticalTaskTwo = challengePreviousDay.criticalTaskTwo
+                if carryOverCriticalTasks, challengeCurrentDay.criticalTaskOne.isEmpty, challengeCurrentDay.criticalTaskTwo.isEmpty {
+                    challengeCurrentDay.criticalTaskOne = criticalTaskOne
+                    challengeCurrentDay.criticalTaskTwo = criticalTaskTwo
                 }
             } else {
                 isShowingFinishedAlert = true
