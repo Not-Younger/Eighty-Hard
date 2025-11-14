@@ -28,7 +28,7 @@ struct AlreadyStartedView: View {
             }
             
             Section("Progress Details") {
-                DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
+                DatePicker("Start Date", selection: $startDate, in: ...Date(), displayedComponents: .date)
             }
         }
         .navigationTitle("Already started?")

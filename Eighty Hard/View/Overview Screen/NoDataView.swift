@@ -26,7 +26,13 @@ struct NoDataView: View {
                 .foregroundStyle(.white.opacity(0.9))
             
             Group {
-                Text("This date is in the future or the challenge was quit before it happened and can't be tracked yet.")
+                if let challenge = day.challenge {
+                    if challenge.status == .inProgress {
+                        Text("This date is in the future and can't be tracked yet.")
+                    } else {
+                        Text("This day can't be tracked because the challenge ended before it.")
+                    }
+                }
             }
             .font(.subheadline)
             .foregroundStyle(.gray)

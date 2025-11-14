@@ -57,7 +57,7 @@ extension Challenge {
     }
     
     func quitChallenge() -> Bool {
-        if Calendar.current.startOfDay(for: Date()) <= Calendar.current.startOfDay(for: endDate) {
+        if Calendar.current.startOfDay(for: Date()) < Calendar.current.startOfDay(for: endDate) {
             endDate = Date()
             status = .quit
             print("Challenge quit...")
@@ -167,7 +167,7 @@ extension Challenge {
     }
     
     var performanceText: String {
-        let percentage = String(format: "%.2f", completionFraction * 100)
+        let percentage = String(format: "%.2f", completionPercentage)
         
         // Encouragement before grading
         if daysCompleted < Challenge.daysBeforeGrade {
