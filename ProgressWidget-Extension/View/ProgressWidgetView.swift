@@ -10,17 +10,30 @@ import WidgetKit
 import SwiftUI
 
 struct ProgressWidgetView: View {
+    @Environment(\.widgetFamily) var family
     @Query private var challenges: [Challenge]
     var entry: ProgressProvider.Entry
     
     @State private var challenge: Challenge? = nil
 
     var body: some View {
-        Group {
+        VStack {
             let days = (challenge?.days ?? []).sorted { $0.number < $1.number }
-            WidgetOverviewView(days: days)
-            if let currentDay = challenge?.currentDay {
-                WidgetTaskCompletionView(currentDay: currentDay, circleSize: 8)
+            let currentDay = challenge?.currentDay ?? Day(number: 70, date: Date())
+            switch family {
+            case .systemSmall:
+                WidgetTaskCompletionView(currentDay: currentDay, circleSize: 8, isSmallWidget: true)
+            case .systemMedium:
+                WidgetOverviewView(days: days)
+                WidgetTaskCompletionView(currentDay: currentDay, circleSize: 8, isSmallWidget: false)
+            case .systemLarge:
+                let daysCompletedFraction = challenge?.daysCompletedFraction ?? 1
+                let currentDayNumber: Int = challenge?.currentDay?.number ?? 80
+                ChallengeProgressionView(daysCompletedFraction: daysCompletedFraction, currentDayNumber: currentDayNumber)
+                WidgetOverviewView(days: days)
+                WidgetTaskCompletionView(currentDay: currentDay, circleSize: 8, isSmallWidget: false)
+            default:
+                ProgressView()
             }
         }
         .containerBackground(for: .widget) {
@@ -33,7 +46,8 @@ struct ProgressWidgetView: View {
     }
     
     func getRandomChallenge() -> Challenge {
-        let challenge = Challenge(startDate: Date.distantPast)
+        let pastDate = Calendar.current.date(byAdding: .day, value: -70, to: Date())!
+        let challenge = Challenge(startDate: pastDate)
         
         for day in challenge.days ?? [] {
             // Randomize task completion

@@ -22,12 +22,14 @@ struct Progress_Widget_Extension: Widget {
         .configurationDisplayName("Challenge Progress")
         .description("Overview of your progress on the 80 Hard challenge.")
         .supportedFamilies([
-            .systemMedium
+            .systemSmall,
+            .systemMedium,
+            .systemLarge
         ])
     }
 }
 
-#Preview(as: .systemMedium) {
+#Preview(as: .systemLarge) {
     Progress_Widget_Extension()
 } timeline: {
     ProgressEntry(date: .now)

@@ -67,6 +67,8 @@ extension Challenge {
             if let currentDay = currentDay {
                 print("Status in progress: \(currentDay.number) days")
                 return currentDay.number
+            } else {
+                return 80
             }
         case .quit:
             if let quitDate {
@@ -104,6 +106,7 @@ extension Challenge {
     
     var daysCompletedFraction: Double {
         guard daysCompleted > 0 else { return 0 }
+        print("Days completed fraction: \(Double(daysCompleted) / 80.0)")
         return Double(daysCompleted) / 80.0
     }
 
