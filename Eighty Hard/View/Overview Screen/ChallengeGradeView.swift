@@ -42,7 +42,10 @@ struct ChallengeGradeView: View {
                 Group {
                     if challenge.status != .inProgress && challenge.daysCompleted < Challenge.daysBeforeGrade {
                         Text("You didn't complete enough days to get a final grade.")
-                    } else if challenge.status != .inProgress {
+                    } else if challenge.status == .quit {
+                        let percentage = String(format: "%.2f", challenge.completionPercentage)
+                        Text("You completed \(percentage)% of your tasks through \(challenge.daysCompleted) days.")
+                    } else if challenge.status == .completed {
                         let percentage = String(format: "%.2f", challenge.completionPercentage)
                         Text("You completed \(percentage)% of your tasks.")
                     } else {

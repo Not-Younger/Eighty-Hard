@@ -12,53 +12,37 @@ import SwiftData
 class Challenge: Identifiable {
     var id: String = UUID().uuidString
     var startDate: Date = Date()
-    var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 80)
+    var quitDate: Date? = nil
+    var endDate: Date = Date()
     var statusRaw: String = ChallengeStatus.inProgress.rawValue
 
     @Relationship(deleteRule: .cascade)
     var days: [Day]?
-    
-    // Start today
-    init() {
-        var days: [Day] = []
-        for i in 1...80 {
-            let date = Date().addingTimeInterval(60 * 60 * 24 * Double(i - 1))
-            print("Adding day \(i) on \(date)")
-            days.append(Day(number: i, date: date))
+
+    init(startDate: Date = Date()) {
+        self.startDate = Calendar.current.startOfDay(for: startDate)
+        endDate = Calendar.current.date(byAdding: .day, value: 79, to: self.startDate)!
+        days = (0..<80).compactMap { offset in
+            guard let dayDate = Calendar.current.date(byAdding: .day, value: offset, to: self.startDate) else {
+                return nil
+            }
+            return Day(number: offset + 1, date: dayDate)
         }
-        self.days = days
-    }
-    
-    // Start in past
-    init(startDate: Date) {
-        self.startDate = startDate
-        self.endDate = startDate.addingTimeInterval(60 * 60 * 24 * 80)
-        var days: [Day] = []
-        for i in 1...80 {
-            let date = startDate.addingTimeInterval(60 * 60 * 24 * Double(i - 1))
-            print("Adding day \(i) on \(date)")
-            days.append(Day(number: i, date: date))
-        }
-        self.days = days
     }
 }
+
 
 extension Challenge {
     public static var daysBeforeGrade: Int = 3
     
     var currentDay: Day? {
-        for day in days ?? [] {
-            if Calendar.current.isDateInToday(day.date) {
-                return day
-            }
-        }
-        print("Current day not found")
-        return nil
+        days?.first { Calendar.current.isDateInToday($0.date) }
     }
     
     func quitChallenge() -> Bool {
-        if Calendar.current.startOfDay(for: Date()) < Calendar.current.startOfDay(for: endDate) {
-            endDate = Date()
+        let proposedQuitDate = Calendar.current.startOfDay(for: Date())
+        if proposedQuitDate < Calendar.current.startOfDay(for: endDate) {
+            quitDate = proposedQuitDate
             status = .quit
             print("Challenge quit...")
             return true
@@ -78,28 +62,32 @@ extension Challenge {
     
     var daysCompleted: Int {
         // Challenge in progress
-        if let currentDay = currentDay {
-            return currentDay.number
-        }
-        // Challenge quit early
-        if status == .quit {
-            let components = Calendar.current.dateComponents([.day], from: startDate, to: endDate)
-            if let daysBetween = components.day {
-                return daysBetween
+        switch status {
+        case .inProgress:
+            if let currentDay = currentDay {
+                print("Status in progress: \(currentDay.number) days")
+                return currentDay.number
             }
+        case .quit:
+            if let quitDate {
+                let components = Calendar.current.dateComponents([.day], from: startDate, to: quitDate)
+                if let daysBetween = components.day {
+                    print("Status quit: \(daysBetween + 1) days")
+                    return daysBetween + 1
+                }
+            }
+        case .completed:
+            print("Status completed: 80 days")
+            return 80
         }
-        // Challenge completed and in the past
-        return 80
+        
+        return 0
     }
     
     var daysRemaining: Int {
-        // Challenge in progress
-        if let currentDay = currentDay {
-            return 80 - currentDay.number
-        }
-        // Challenge completed or quit and in the past
-        return 0
+        max(0, 80 - daysCompleted)
     }
+
     
     var completedTasks: Int {
         var totalCompletedTasks: Int = 0
@@ -115,9 +103,10 @@ extension Challenge {
     }
     
     var daysCompletedFraction: Double {
-        guard totalTasks > 0 else { return 0 }
-        return Double(daysCompleted) / Double(80)
+        guard daysCompleted > 0 else { return 0 }
+        return Double(daysCompleted) / 80.0
     }
+
     
     var completionPercentage: Double {
         guard totalTasks > 0 else { return 0 }

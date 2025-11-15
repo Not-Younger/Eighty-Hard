@@ -25,9 +25,9 @@ struct ContentView: View {
                 .onAppear {
                     handleChallengeSync()
                 }
-                .onChange(of: challenges) { _, _ in
-                    handleChallengeSync()
-                }
+//                .onChange(of: challenges) { _, _ in
+//                    handleChallengeSync()
+//                }
                 .onChange(of: scenePhase) { _, newValue in
                     if newValue == .inactive {
                         WidgetCenter.shared.reloadTimelines(ofKind: "Progress_Widget")
@@ -91,9 +91,9 @@ struct ContentView: View {
     let container: ModelContainer = DataModel.shared.modelContainer
     let lnManager = LocalNotificationManager()
     
-    let challenge = Challenge()
-    challenge.status = .completed
-    container.mainContext.insert(challenge)
+//    let challenge = Challenge()
+//    challenge.status = .completed
+//    container.mainContext.insert(challenge)
     
     return ContentView()
         .modelContainer(container)

@@ -87,26 +87,43 @@ extension Day {
     }
     
     var completionColor: Color {
-        // If day hasn't happened return gray
-        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: Date())) else { return Color.gray.opacity(0.3) }
-        
-        // If day was after the challenges end date return gray
-        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: challenge?.endDate ?? Date())) else { return Color.gray.opacity(0.3) }
-        
+
+        let dayStart = Calendar.current.startOfDay(for: date)
+        let todayStart = Calendar.current.startOfDay(for: Date())
+
+        // Future days
+        if dayStart > todayStart {
+            return Color.gray.opacity(0.3)
+        }
+
+        // Quit date check
+        if let quitDate = challenge?.quitDate {
+            if dayStart > Calendar.current.startOfDay(for: quitDate) {
+                return Color.gray.opacity(0.3)
+            }
+        }
+
+        // End date check
+        if let endDate = challenge?.endDate {
+            if dayStart > Calendar.current.startOfDay(for: endDate) {
+                return Color.gray.opacity(0.3)
+            }
+        }
+
         let tasks = [
-            self.didDrinkWater,
-            self.didWorkout,
-            self.didDiet,
-            self.didStayUnderDrinkLimit,
-            self.didReading,
-            self.didColdShower,
-            self.didCriticalTasks,
-            self.didMeditate,
-            self.didSocialMediaLimit
+            didDrinkWater,
+            didWorkout,
+            didDiet,
+            didStayUnderDrinkLimit,
+            didReading,
+            didColdShower,
+            didCriticalTasks,
+            didMeditate,
+            didSocialMediaLimit
         ]
-        
+
         let fraction = Double(tasks.filter { $0 }.count) / Double(tasks.count)
-        
+
         switch fraction {
             case 0.0..<0.2: return Color.red.opacity(0.3)
             case 0.2..<0.4: return Color.red.opacity(0.4)
@@ -116,13 +133,30 @@ extension Day {
             default:        return Color.red.opacity(0.8)
         }
     }
+
     
     var isAccessible: Bool {
-        // If day hasn't happened return false
-        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: Date())) else { return false }
-        
-        // If day was after the challenges end date return false
-        guard (Calendar.current.startOfDay(for: date) <= Calendar.current.startOfDay(for: challenge?.endDate ?? Date())) else { return false }
+        let dayStart = Calendar.current.startOfDay(for: date)
+        let todayStart = Calendar.current.startOfDay(for: Date())
+
+        // Future days
+        if dayStart > todayStart {
+            return false
+        }
+
+        // Quit date check
+        if let quitDate = challenge?.quitDate {
+            if dayStart > Calendar.current.startOfDay(for: quitDate) {
+                return false
+            }
+        }
+
+        // End date check
+        if let endDate = challenge?.endDate {
+            if dayStart > Calendar.current.startOfDay(for: endDate) {
+                return false
+            }
+        }
         
         return true
     }

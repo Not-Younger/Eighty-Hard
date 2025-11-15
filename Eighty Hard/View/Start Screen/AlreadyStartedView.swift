@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AlreadyStartedView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var challenges: [Challenge]
     
     @Binding var activeChallenge: Challenge?
     @Binding var path: NavigationPath
