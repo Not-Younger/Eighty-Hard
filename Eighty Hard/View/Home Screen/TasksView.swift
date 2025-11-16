@@ -14,6 +14,7 @@ struct TasksView: View {
     @Bindable var day: Day
     
     @State private var isShowingCriticalTaskAlert: Bool = false
+    @FocusState private var isFocusCriticalTask: Bool
     
     private var tasks: [(String, Binding<Bool>)] {
         [
@@ -30,133 +31,157 @@ struct TasksView: View {
     
     var body: some View {
         let tasksCompleted = day.tasksCompleted
-        VStack(alignment: .leading, spacing: 20) {
-            VStack(alignment: .leading, spacing: 8) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Day \(day.number)")
-                        .font(.title)
-                        .bold()
-                    
-                    Text(day.date.formatted(date: .abbreviated, time: .omitted))
-                        .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                }
-                .padding(.bottom, 8)
-                
-                Text(tasksCompleted == 9 ? "🎉 All tasks completed!" : "\(tasksCompleted) of 9 tasks completed")
-                    .font(.headline)
-                    .foregroundColor(tasksCompleted == 9 ? .primary : .secondary)
-                    .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
-                
-                ProgressView(value: Double(tasksCompleted), total: Double(9))
-                    .tint(.red)
-                    .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
-            }
-            .padding(.bottom)
-            
-            Divider()
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    ForEach(tasks.indices, id: \.self) { index in
-                        TaskRow(name: tasks[index].0, isComplete: Binding(
-                            get: { tasks[index].1.wrappedValue },
-                            set: { newValue in
-                                tasks[index].1.wrappedValue = newValue
-                                
-                                // Haptic for individual task
-                                let impact = UIImpactFeedbackGenerator(style: .light)
-                                impact.impactOccurred()
-                                
-                                // Celebration haptic if all tasks completed
-                                if tasksCompleted == 9 {
-                                    let generator = UINotificationFeedbackGenerator()
-                                    generator.notificationOccurred(.success)
-                                }
-                            }
-                        ))
-                    }
-                    HStack {
-                        let didCriticalTasks = day.didCriticalTasks
-                        Image(systemName: didCriticalTasks ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(didCriticalTasks ? .red : .gray)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Day \(day.number)")
                             .font(.title)
-                            .onTapGesture {
-                                withAnimation {
-                                    if day.criticalTaskOne.isEmpty || day.criticalTaskTwo.isEmpty {
-                                        isShowingCriticalTaskAlert.toggle()
-                                    } else if !day.criticalTaskOne.isEmpty && !day.criticalTaskTwo.isEmpty {
-                                        let newValue = !didCriticalTasks
-                                        day.didCriticalTaskOne = newValue
-                                        day.didCriticalTaskTwo = newValue
+                            .bold()
+                        
+                        Text(day.date.formatted(date: .abbreviated, time: .omitted))
+                            .foregroundStyle(.secondary)
+                            .font(.subheadline)
+                    }
+                    .padding(.bottom, 8)
+                    
+                    Text(tasksCompleted == 9 ? "🎉 All tasks completed!" : "\(tasksCompleted) of 9 tasks completed")
+                        .font(.headline)
+                        .foregroundColor(tasksCompleted == 9 ? .primary : .secondary)
+                        .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
+                    
+                    ProgressView(value: Double(tasksCompleted), total: Double(9))
+                        .tint(.red)
+                        .animation(.easeInOut(duration: 0.3), value: tasksCompleted)
+                }
+                .padding(.bottom)
+                
+                Divider()
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(tasks.indices, id: \.self) { index in
+                            TaskRow(name: tasks[index].0, isComplete: Binding(
+                                get: { tasks[index].1.wrappedValue },
+                                set: { newValue in
+                                    tasks[index].1.wrappedValue = newValue
+                                    
+                                    // Haptic for individual task
+                                    let impact = UIImpactFeedbackGenerator(style: .light)
+                                    impact.impactOccurred()
+                                    
+                                    // Celebration haptic if all tasks completed
+                                    if tasksCompleted == 9 {
+                                        let generator = UINotificationFeedbackGenerator()
+                                        generator.notificationOccurred(.success)
                                     }
                                 }
+                            ))
+                        }
+                        HStack {
+                            let didCriticalTasks = day.didCriticalTasks
+                            Image(systemName: didCriticalTasks ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(didCriticalTasks ? .red : .gray)
+                                .font(.title)
+                                .onTapGesture {
+                                    withAnimation {
+                                        if day.criticalTaskOne.isEmpty || day.criticalTaskTwo.isEmpty {
+                                            isShowingCriticalTaskAlert.toggle()
+                                        } else if !day.criticalTaskOne.isEmpty && !day.criticalTaskTwo.isEmpty {
+                                            let newValue = !didCriticalTasks
+                                            day.didCriticalTaskOne = newValue
+                                            day.didCriticalTaskTwo = newValue
+                                        }
+                                    }
+                                }
+                            Text(Day.criticalTaskTitle)
+                        }
+                        Group {
+                            HStack {
+                                Image(systemName: day.didCriticalTaskOne ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(day.didCriticalTaskOne ? .red : .gray)
+                                    .font(.title)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            if day.criticalTaskOne.isEmpty {
+                                                isShowingCriticalTaskAlert.toggle()
+                                            } else {
+                                                day.didCriticalTaskOne.toggle()
+                                            }
+                                        }
+                                    }
+                                TextField("Task One", text: $day.criticalTaskOne, axis: .vertical)
+                                    .onChange(of: day.criticalTaskOne) { _, newValue in
+                                        criticalTaskOne = newValue
+                                        withAnimation {
+                                            if newValue.isEmpty {
+                                                day.didCriticalTaskOne = false
+                                            }
+                                        }
+                                    }
+                                    .focused($isFocusCriticalTask)
                             }
-                        Text(Day.criticalTaskTitle)
-                    }
-                    Group {
-                        HStack {
-                            Image(systemName: day.didCriticalTaskOne ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(day.didCriticalTaskOne ? .red : .gray)
-                                .font(.title)
-                                .onTapGesture {
-                                    withAnimation {
-                                        if day.criticalTaskOne.isEmpty {
-                                            isShowingCriticalTaskAlert.toggle()
-                                        } else {
-                                            day.didCriticalTaskOne.toggle()
+                            HStack {
+                                Image(systemName: day.didCriticalTaskTwo ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(day.didCriticalTaskTwo ? .red : .gray)
+                                    .font(.title)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            if day.criticalTaskTwo.isEmpty {
+                                                isShowingCriticalTaskAlert.toggle()
+                                            } else {
+                                                day.didCriticalTaskTwo.toggle()
+                                            }
                                         }
                                     }
-                                }
-                            TextField("Task One", text: $day.criticalTaskOne, axis: .vertical)
-                                .onChange(of: day.criticalTaskOne) { _, newValue in
-                                    criticalTaskOne = newValue
-                                    withAnimation {
-                                        if newValue.isEmpty {
-                                            day.didCriticalTaskOne = false
+                                TextField("Task Two", text: $day.criticalTaskTwo, axis: .vertical)
+                                    .onChange(of: day.criticalTaskTwo) { _, newValue in
+                                        criticalTaskTwo = newValue
+                                        withAnimation {
+                                            if newValue.isEmpty {
+                                                day.didCriticalTaskTwo = false
+                                            }
                                         }
                                     }
-                                }
+                                    .focused($isFocusCriticalTask)
+                            }
                         }
-                        HStack {
-                            Image(systemName: day.didCriticalTaskTwo ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(day.didCriticalTaskTwo ? .red : .gray)
-                                .font(.title)
-                                .onTapGesture {
-                                    withAnimation {
-                                        if day.criticalTaskTwo.isEmpty {
-                                            isShowingCriticalTaskAlert.toggle()
-                                        } else {
-                                            day.didCriticalTaskTwo.toggle()
-                                        }
-                                    }
-                                }
-                            TextField("Task Two", text: $day.criticalTaskTwo, axis: .vertical)
-                                .onChange(of: day.criticalTaskTwo) { _, newValue in
-                                    criticalTaskTwo = newValue
-                                    withAnimation {
-                                        if newValue.isEmpty {
-                                            day.didCriticalTaskTwo = false
-                                        }
-                                    }
-                                }
+                        .padding(.leading)
+                        .padding(.leading)
+                        .alert("Not Quite Yet", isPresented: $isShowingCriticalTaskAlert) {
+                            Button("OK") { }
+                        } message: {
+                            Text("Make sure all your critical tasks are added and checked off before finishing.")
                         }
-                    }
-                    .padding(.leading)
-                    .padding(.leading)
-                    .alert("Not Quite Yet", isPresented: $isShowingCriticalTaskAlert) {
-                        Button("OK") { }
-                    } message: {
-                        Text("Make sure all your critical tasks are added and checked off before finishing.")
                     }
                 }
-                Spacer()
             }
-            Spacer()
+            .padding()
         }
-        .padding()
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .navigationTitle("Tasks")
         .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .bottom) {
+            if isFocusCriticalTask {
+                HStack {
+                    Spacer()
+                    Button {
+                        withAnimation {
+                            isFocusCriticalTask = false
+                        }
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down.fill")
+                            .font(.title2)
+                            .padding(8)
+                            .foregroundColor(.white)
+                            .background(Color.red)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                }
+                .padding()
+            }
+        }
     }
 }
 

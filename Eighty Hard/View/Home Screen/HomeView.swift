@@ -34,11 +34,7 @@ struct HomeView: View {
                         LinearGradient(colors: [.black, .red], startPoint: .top, endPoint: .bottom)
                             .ignoresSafeArea()
                     }
-                    ScrollView {
-                        TasksView(day: currentDay)
-                    }
-                    .scrollIndicators(.hidden)
-                    .scrollBounceBehavior(.basedOnSize)
+                    TasksView(day: currentDay)
                 }
             } else {
                 ProgressView()
