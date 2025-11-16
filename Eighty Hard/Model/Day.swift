@@ -110,27 +110,17 @@ extension Day {
             }
         }
 
-        let tasks = [
-            didDrinkWater,
-            didWorkout,
-            didDiet,
-            didStayUnderDrinkLimit,
-            didReading,
-            didColdShower,
-            didCriticalTasks,
-            didMeditate,
-            didSocialMediaLimit
-        ]
-
-        let fraction = Double(tasks.filter { $0 }.count) / Double(tasks.count)
-
-        switch fraction {
-            case 0.0..<0.2: return Color.red.opacity(0.3)
-            case 0.2..<0.4: return Color.red.opacity(0.4)
-            case 0.4..<0.6: return Color.red.opacity(0.5)
-            case 0.6..<0.8: return Color.red.opacity(0.6)
-            case 0.8..<0.99: return Color.red.opacity(0.7)
-            default:        return Color.red.opacity(0.8)
+        switch tasksCompleted {
+        case 0: return Color.red.opacity(0.28)
+            case 1: return Color.red.opacity(0.36)
+            case 2: return Color.red.opacity(0.44)
+            case 3: return Color.red.opacity(0.52)
+            case 4: return Color.red.opacity(0.60)
+            case 5: return Color.red.opacity(0.68)
+            case 6: return Color.red.opacity(0.76)
+            case 7: return Color.red.opacity(0.84)
+            case 8: return Color.red.opacity(0.92)
+            default: return Color.red
         }
     }
 
