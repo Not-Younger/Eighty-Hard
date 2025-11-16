@@ -215,7 +215,7 @@ struct SettingsView: View {
         rows.append(headers)
 
         // Data rows
-        for day in days {
+        for day in days.sorted(by: { $0.date < $1.date }) {
             var row: [String] = []
 
             row.append("\(day.number)")
@@ -234,7 +234,7 @@ struct SettingsView: View {
             rows.append(row)
         }
         
-        for i in days.count...80 {
+        for i in days.count..<80 {
             var row: [String] = []
             
             row.append("\(i)")

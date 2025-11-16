@@ -41,7 +41,7 @@ extension Challenge {
     
     func quitChallenge() -> Bool {
         let proposedQuitDate = Calendar.current.startOfDay(for: Date())
-        if proposedQuitDate < Calendar.current.startOfDay(for: endDate) {
+        if proposedQuitDate <= Calendar.current.startOfDay(for: endDate) {
             quitDate = proposedQuitDate
             status = .quit
             print("Challenge quit...")
