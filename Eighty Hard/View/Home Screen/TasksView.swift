@@ -108,7 +108,7 @@ struct TasksView: View {
                                         }
                                     }
                                 }
-                            TextField("Task One", text: $day.criticalTaskOne)
+                            TextField("Task One", text: $day.criticalTaskOne, axis: .vertical)
                                 .onChange(of: day.criticalTaskOne) { _, newValue in
                                     criticalTaskOne = newValue
                                     withAnimation {
@@ -131,7 +131,7 @@ struct TasksView: View {
                                         }
                                     }
                                 }
-                            TextField("Task Two", text: $day.criticalTaskTwo)
+                            TextField("Task Two", text: $day.criticalTaskTwo, axis: .vertical)
                                 .onChange(of: day.criticalTaskTwo) { _, newValue in
                                     criticalTaskTwo = newValue
                                     withAnimation {
